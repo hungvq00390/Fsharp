@@ -1,22 +1,29 @@
 ﻿// Learn more about F# at http://fsharp.net
 // See the 'F# Tutorial' project for more help.
 module Test
-let rec mem a l = match l with
+let rec mem a l = 
+  match l with
   | [] -> false
   | hd::tl -> hd=a || mem a tl
 
-let rec append l1 l2 = match l1 with
+let rec append l1 l2 =
+  match l1 with
   | [] -> l2
   | hd :: tl -> hd :: append tl l2
+
+let rec reverse = function 
+  | [] -> []
+  | hd::tl -> append (reverse tl) [hd]
 
 let rec minus m n = m - n;;
                  
 let rec max a b = if a > b then a else b
 
-let rec getMaxList l = match l with
-| [] -> failwith "Can't take the minimum of an empty list"
-| [x] -> x
-| x::xs ->
+let rec getMaxList l = 
+  match l with
+  | [] -> failwith "Can't take the minimum of an empty list"
+  | [x] -> x
+  | x::xs ->
     let maxRest = getMaxList xs
     max x maxRest
        
@@ -72,8 +79,8 @@ let rec summary s1 s2 =
 let rec sum s1 s2 = if (sign s1) = (sign s2) then summary s1 s2
                      else ["Can not calculate sum of 2 string"]
 
-let s1 = ['#';'9';'+';'1']
-let s2 = ['#';'9';'+';'7']
+let s1 = ['#';'9';'+';'1';'-';'1']
+let s2 = ['#';'9';'+';'7';'-';'3']
 let list = sum s1 s2
 list |> List.iter (fun x -> printf "%s" x)
 
