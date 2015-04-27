@@ -58,7 +58,7 @@ let rec balanceStr string2 =
                else (balanceStr xs)
 printfn "Test BalanceString %A" (balanceStr string2);;
 
-let signChange (s:string) = [for c in s -> c]
+let string2char (s:string) = [for c in s -> c]
 
 let rec sign s = 
   match s with
@@ -73,14 +73,40 @@ let rec summary s1 s2 =
   | [] -> [""]
   | x::xs -> match s2 with 
                 | [] ->  [""]
-                | x2::xs2 -> if isSignal x && isSignal x2 then x.ToString()::(summary xs xs2)
+                | x2 :: xs2 -> if isSignal x && isSignal x2 then x.ToString() :: (summary xs xs2)
                                else (add x x2)::(summary xs xs2)
 
 let rec sum s1 s2 = if (sign s1) = (sign s2) then summary s1 s2
                      else ["Can not calculate sum of 2 string"]
 
+let isSharpNtemp s = 
+  match s with
+  | [] -> false
+  | x::[] -> false
+  | x::y::xs -> if (x = '#') && (y <> '#') then true
+                  else false
+
+let isSharpN s = if s = "" then false
+                  else isSharpNtemp (string2char s)
+
 let s1 = ['#';'9';'+';'1';'-';'1']
 let s2 = ['#';'9';'+';'7';'-';'3']
+
+let calWeight (s:char list) (h1:int) = 
+ match s with
+ | x::y::tl -> if (h1 < 0) && (isSignal x) = false then x.ToString()::(calWeight (y :: tl) (h1 - 1))
+                        else if (isSignal x) then [""]
+                            else calWeight (y :: tl) (h1 - 1)
+ | [] -> [""]
+ | [x] -> [""]
+
+let test = calWeight s1 2
+
+let rec join s1 s2 = 
+  match s1 with
+  | [] -> [""]
+  | x::[] -> [""]
+  
 let list = sum s1 s2
 list |> List.iter (fun x -> printf "%s" x)
 
