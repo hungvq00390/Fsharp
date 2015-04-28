@@ -27,8 +27,8 @@ let rec getMaxList l =
     let maxRest = getMaxList xs
     max x maxRest
        
-//printfn "%A" (getMaxList [3;5;6;7;8]);;
-//printfn "%A" (max 7 1);;
+printfn "%A" (getMaxList [3;5;6;7;8]);;
+printfn "%A" (max 7 1);;
 
 let code = []
 let rec parse test = 
@@ -48,6 +48,7 @@ let isSignal s = if (s = '+' || s = '-' || s = '#' || s = ':') then true else fa
 
 let explode (s:string) = [for c in s -> c]
 let string2 = explode "+1-1+1-1+1-1+1+1-1"
+
 let rec balanceStr string2 = 
   match string2 with 
   | [] -> 0
@@ -89,19 +90,36 @@ let isSharpNtemp s =
 let isSharpN s = if s = "" then false
                   else isSharpNtemp (string2char s)
 
-let s1 = ['#';'9';'+';'1';'-';'1']
-let s2 = ['#';'9';'+';'7';'-';'3']
+let s1 = ['#';'1';'+';'1';'-';'1']
+let s2 = ['#';'1';'+';'1';'-';'1']
+let s3 = ['#';'1';'-';'2']
 
-let calWeight (s:char list) (h1:int) = 
+let rec calWeightTemp (s:char list) (h1:int) = 
  match s with
- | x::y::tl -> if (h1 < 0) && (isSignal x) = false then x.ToString()::(calWeight (y :: tl) (h1 - 1))
-                        else if (isSignal x) then [""]
-                            else calWeight (y :: tl) (h1 - 1)
  | [] -> [""]
- | [x] -> [""]
+ | x::tl -> if (h1 > 0) then calWeightTemp (tl) (h1 - 1) 
+             else if (isSignal x) = false then x.ToString()::(calWeightTemp (tl) (h1 - 1))
+               else [""]
+let calWeight s h = (calWeightTemp s h) |> String.concat ""
+
+printfn "Test calWeigh %s" (calWeight s1 1);;
 
 let test = calWeight s1 2
 
+let rec calSmallStemp (s:char list) (h:int) =
+ match s with
+ | [] -> [""]
+ | x::tl -> if (h > 0) then calSmallStemp (tl) (h - 1) else x.ToString() :: if (isSignal x) = false then (calSmallStemp tl (h-1)) else [""]
+
+let calSmallS (s:char list) (h:int) (ch:int) = 
+    if (ch > 1) then reverse (calSmallStemp (reverse s) (s.Length - h)) |> String.concat "" else "#0"
+
+printfn "Test calSmallS %s" (calSmallS s3 2 2);;
+
+
+
+
+// TO-DO
 let rec join s1 s2 = 
   match s1 with
   | [] -> [""]
