@@ -60,6 +60,10 @@ let rec balanceStr string2 =
 printfn "Test BalanceString %A" (balanceStr string2);;
 
 let string2char (s:string) = [for c in s -> c]
+let rec charlist2stringlist (s:char list) = 
+ match s with 
+ | [] -> []
+ | x::xs -> x.ToString()::charlist2stringlist xs
 
 let rec sign s = 
   match s with
@@ -116,15 +120,36 @@ let calSmallS (s:char list) (h:int) (ch:int) =
 
 printfn "Test calSmallS %s" (calSmallS s3 2 2);;
 
+let rec getAfterClusterIndexTemp (s:char list) (h:int) (count:int) =
+ match s with
+ | [] -> -1
+ | x::xs -> if (h >= 0) then getAfterClusterIndexTemp xs (h-1) count else if isSignal x then count else getAfterClusterIndexTemp xs (h-1) (count + 1)
 
+let getAfterClusterIndex (s:char list) (h:int) = 
+    if (getAfterClusterIndexTemp s h 0) > -1 then (getAfterClusterIndexTemp s h 0) else s.Length
+    
+let rec calBigsTemp (s:char list) (h:int) = 
+ match s with 
+ | [] -> [""]
+ | x::xs -> if s.Length = getAfterClusterIndex s h then [""] else if (h> 0) then (x.ToString()::calBigsTemp xs (h-1)) else [""]
 
+let calBigs (s:char list) (h:int) = calBigsTemp s h |> String.concat ""
+printfn "Test calBig %s" (calBigs s3 2);;
 
 // TO-DO
-let rec join s1 s2 = 
+let s4 = []
+let s5 = ['#';'1';'-';'2']
+let rec join (s1:char list) (s2:char list) = 
   match s1 with
-  | [] -> [""]
-  | x::[] -> [""]
-  
+  | [] -> match s2 with 
+          | [] -> [""]
+          | x::xs -> charlist2stringlist (x::xs)
+  | x::xs -> match s2 with 
+          | [] -> charlist2stringlist (x::xs)
+          | hd::tl -> if (isSharpN (charlist2stringlist(x::xs) |> String.concat "")) && (isSharpN(charlist2stringlist(hd::tl) |> String.concat "")) 
+                        then sum s1 s2 else charlist2stringlist (hd::tl)
+printfn "Test Join %A" (join s4 s5);;
+
 let list = sum s1 s2
 list |> List.iter (fun x -> printf "%s" x)
 
