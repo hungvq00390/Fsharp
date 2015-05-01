@@ -172,12 +172,25 @@ let rec CanonicalTemp (s:char list) =
 
 let rec Canonical (s:string) = CanonicalTemp (string2charlist s) |> String.concat ""
 
-//End Canonical funtion
+//End Canonical funtion//
 
+//Choice//
+
+let rec choiceTemp (s1:char list) (s2:char list) =
+ match s1 with
+ | [] -> []
+ | '#'::xs -> match s2 with 
+              | [] -> []
+              | '#'::xs2-> if charList2String (removeValue xs) = charList2String (removeValue xs2) then if charListToInt (getValue xs2) > charListToInt (getValue xs2) then s1 else s2
+                             else []
+              | x::xs2 -> []
+ | x::xs -> []
+
+let rec Choice (s1:string) (s2:string) = if (charList2String (choiceTemp (string2charlist s1) (string2charlist s2))) = "" then "Can not choice" else charList2String (choiceTemp (string2charlist s1) (string2charlist s2))
 ////// Main Function //////
 
 let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
-let s20 = "#4#5+3#3-4";;
+let s14 = "#4#5+3#3-4";;
 let testCanonical = Canonical s10
 printfn "\nTest Canonical %s" (testCanonical);;
 
@@ -190,10 +203,12 @@ let s13 = "-1#2-3+2+22-3-2";;
 let testJoin = Join s13
 printfn "\nTest join %s" (testJoin);;
 
+let s17 = "#2-3+2+22-3-2";;
+let s18 = "#4-3+2+22-3-2";;
+let testChoice = Choice s17 s18
+printfn "\nTest Choice: %s" (testChoice);;
+
 ///// End Main Function /////
-
-
-
 let pause () =  
   match System.Diagnostics.Debugger.IsAttached with  
   | true ->  
