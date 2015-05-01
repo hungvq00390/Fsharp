@@ -49,7 +49,7 @@ let rec int2CharList a = string2charlist(a.ToString())
 let rec max (a:int) (b:int) = if a > b then a else b
 ///////End Common Function//////////
 
-let isTag s = if (s = '+' || s = '-' || s = '#' || s = ':') then true else false
+let isTag tag = if (tag = '+' || tag = '-' || tag = '#' || tag = ':') then true else false
 
 let rec sign chrlst = 
   match chrlst with
