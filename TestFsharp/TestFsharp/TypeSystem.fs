@@ -21,7 +21,7 @@ let rec append l1 l2 =
   | [] -> l2
   | hd :: tl -> hd :: append tl l2
 
-//Reverse two list
+//Reverse list
 let rec reverse = function 
   | [] -> []
   | hd::tl -> append (reverse tl) [hd]
@@ -35,14 +35,19 @@ let rec getMaxList l =
     let maxRest = getMaxList xs
     max x maxRest
 
-let string2char (s:string) = [for c in s -> c]
+let string2charlist (s:string) = [for c in s -> c]
 let rec charlist2stringlist (s:char list) = 
  match s with 
  | [] -> []
  | x::xs -> x.ToString()::charlist2stringlist xs
 let rec stringToInt s = System.Int32.Parse(s |> String.concat "")
-let rec charToInt s = System.Int32.Parse(charlist2stringlist(s) |> String.concat "")
+let rec charListToInt s = System.Int32.Parse(charlist2stringlist(s) |> String.concat "")
+let rec charList2String s = charlist2stringlist(s) |> String.concat ""
 let rec stringList2String s = s |> String.concat ""
+let rec stringList2charList s = string2charlist (s |> String.concat "")
+
+let rec int2CharList s = string2charlist(s.ToString())
+
 let rec minus m n = m - n
 let rec max (a:int) (b:int) = if a > b then a else b
 
@@ -74,8 +79,8 @@ let rec change (h:int) = if (h> 0) then ":1"::change (h-1) else [""]
 
 let rec joinTemp1 (s1:char list) (s2:char list) =
  match s1 with
- | [] -> change (charToInt s2)
- | x::xs -> if (isSignal x) then change (charToInt s2) else joinTemp1 xs (x::s2) 
+ | [] -> change (charListToInt s2)
+ | x::xs -> if (isSignal x) then change (charListToInt s2) else joinTemp1 xs (x::s2) 
 
 let rec joinTemp (s1:char list) =
  match s1 with
@@ -83,11 +88,11 @@ let rec joinTemp (s1:char list) =
  | x::xs -> if (isSignal x) then if x = '-' then append (joinTemp1 xs []) (joinTemp (removeValue xs))  else x.ToString()::joinTemp xs 
              else x.ToString()::joinTemp xs
 
-let rec Join (s:string) = joinTemp (string2char s) |> String.concat ""
+let rec Join (s:string) = joinTemp (string2charlist s) |> String.concat ""
 //End Join function
 
 //Start Merge function
-let rec add (m:char list) (n:char list) = (charToInt(getValue(m)) + charToInt(getValue(n))).ToString()
+let rec add (m:char list) (n:char list) = (charListToInt(getValue(m)) + charListToInt(getValue(n))).ToString()
 
 let rec mergeTemp1 s1 s2 = 
   match s1 with 
@@ -100,41 +105,79 @@ let rec mergeTemp1 s1 s2 =
 let rec mergeTemp s1 s2 = if (sign s1) = (sign s2) then mergeTemp1 s1 s2
                             else ["Fail, can not merge 2 string"]
 
-let rec Merge (s:string) (s1:string) = mergeTemp (string2char s) (string2char s1) |> String.concat ""
+let rec Merge (s:string) (s1:string) = mergeTemp (string2charlist s) (string2charlist s1) |> String.concat ""
 //End Merge function
 
-let rec getNextSignal s = 
+let rec getNextSignal s h = 
  match s with
  | [] -> ""
- | x::xs -> if isSignal x then x.ToString() else getNextSignal xs
+ | x::xs -> if (isSignal x) then 
+               if h = 1 then x.ToString() 
+                 else getNextSignal xs (h-1) 
+              else getNextSignal xs h
 
-let rec getNextValue s = 
+let rec getNextValue s h = 
  match s with
  | [] -> []
- | x::xs -> if isSignal x then getValue xs else getNextValue xs
+ | x::xs -> if (isSignal x) then 
+               if h = 1 then getValue xs 
+                 else getNextValue xs (h-1) 
+              else getNextValue xs h
 
+let s6 = ['#';'3';'#';'8';'8';'-';'4';'3';'#';'3';'-';'2'];;
 let rec removeSignalValue s h = 
  match s with
  | [] -> []
- | x::xs -> if (isSignal x) && h > 0 then removeValue xs else removeSignalValue xs (h-1)
+ | x::xs -> if (isSignal x) && h > 0 then removeSignalValue xs (h-1) else if h <= 0 then removeValue s else removeSignalValue xs h
 
-let s7 = ['#';'1';'#';'2';'-';'3';'+';'2';'+';'2';'2']
+//printf "\nTest removeValue %A" (removeSignalValue s6 3);;
+
+let s7 = ['#';'3';'#';'8';'8';'-';'4';'3';'#';'3';'-';'2'];;
+let rec getSignalValue s h = 
+ match s with
+ | [] -> []
+ | x::xs -> if (isSignal x) && h > 0 then x::getSignalValue xs (h-1) 
+                   else if h > 0 then x::getSignalValue xs h else if h = 0 then getValue s else []
+
+//printf "\nTest getValue %A" (getSignalValue s7 3);;
+
+
 //Start Canonical function
+
+let rec addValue (s:char list) = System.Int32.Parse(charList2String s) + 1
+
+let rec CanonicalTemp1 (s:char list) = 
+ match s with 
+ | [] -> ""
+ | '#' :: xs -> charlist2stringlist s |> String.concat ""
+ | '+' :: xs -> if charListToInt(getValue xs) = 1 then 
+                    if getNextSignal xs 2 = "-" then 
+                       if charListToInt(getNextValue xs 2) = 1 then charList2String ('#' :: int2CharList(charListToInt(getNextValue xs 1) + 1))
+                         else charList2String (append ('#' :: int2CharList(charListToInt(getNextValue xs 1) + 1)) ('-' :: int2CharList(charListToInt(getNextValue xs 2) - 1)))
+                      else charList2String ('#' :: int2CharList(charListToInt(getNextValue xs 1) + 1))
+                  else if getNextSignal xs 2 = "-" then if charListToInt(getNextValue xs 2) = 1 then CanonicalTemp1 (append ('+' :: int2CharList(charListToInt(getValue xs) - 1)) ('#' :: int2CharList(charListToInt(getNextValue xs 1) + 1)))
+                                                           else CanonicalTemp1 (append (append ('+' :: int2CharList(charListToInt(getValue xs) - 1)) ('#' :: int2CharList(charListToInt(getNextValue xs 1) + 1))) ('-' :: int2CharList(charListToInt(getNextValue xs 2) - 1)))
+                          else CanonicalTemp1 (append ('+' :: int2CharList(charListToInt(getValue xs) - 1)) ('#' :: int2CharList(charListToInt(getNextValue xs 1) + 1)))
+ | x::xs -> charlist2stringlist s |> String.concat ""
+
 let rec CanonicalTemp (s:char list) = 
  match s with
  | [] -> []
- | '#'::xs -> if (getNextSignal xs) = "#" then "#"+ (max (charToInt (getValue xs)) (charToInt(getNextValue xs))).ToString()::(CanonicalTemp(removeSignalValue xs 2)) else "#"::CanonicalTemp xs
- | '+'::xs -> if (getNextSignal xs) = "+" then "+"+ (add (getValue xs) (getNextValue xs)).ToString()::(CanonicalTemp(removeSignalValue xs 2)) else "+"::CanonicalTemp xs
- | '-'::xs -> if (getNextSignal xs) = "-" then "-"+ (add (getValue xs) (getNextValue xs)).ToString()::(CanonicalTemp(removeSignalValue xs 2)) else "-"::CanonicalTemp xs
+ | '#'::xs -> if (getNextSignal xs 1) = "#" then CanonicalTemp (stringList2charList ("#"+ (max (charListToInt (getValue xs)) (charListToInt(getNextValue xs 1))).ToString()::(CanonicalTemp(removeSignalValue xs 1)))) else "#"::CanonicalTemp xs
+ | '+'::xs -> if (getNextSignal xs 1) = "+" then CanonicalTemp (stringList2charList ("+"+ (add (getValue xs) (getNextValue xs 1)).ToString()::(CanonicalTemp(removeSignalValue xs 2))))
+                else if (getNextSignal xs 1 = "#") && (getNextSignal xs 2 = "-") then CanonicalTemp (append (string2charlist(CanonicalTemp1 (getSignalValue s 3))) (removeSignalValue xs 3)) 
+                       else "+"::CanonicalTemp xs
+ | '-'::xs -> if (getNextSignal xs 1) = "-" then CanonicalTemp (stringList2charList ("-"+ (add (getValue xs) (getNextValue xs 1)).ToString()::(CanonicalTemp(removeSignalValue xs 2)))) else "-"::CanonicalTemp (xs)
  | x::xs -> x.ToString()::CanonicalTemp xs
 
-let rec Canonical (s:string) = CanonicalTemp (string2char s) |> String.concat ""
+let rec Canonical (s:string) = CanonicalTemp (string2charlist s) |> String.concat ""
 
 //End Canonical funtion
 
 ////// Main Function //////
 
-let s10 = "#1#2-3+2+22";;
+let s10 = "#1#2-3+2+22+13#12-9#2+3#88-4";;
+let s20 = "#4#5+3#3-4";;
 let testCanonical = Canonical s10
 printfn "\nTest Canonical %s" (testCanonical);;
 
@@ -143,7 +186,7 @@ let s12 = "#1#2-3+2+22";;
 let testMerge = Merge s11 s12
 printfn "\nTest Merge %s" (testMerge);;
 
-let s13 = "#1#2-3+2+22-3-2";;
+let s13 = "-1#2-3+2+22-3-2";;
 let testJoin = Join s13
 printfn "\nTest join %s" (testJoin);;
 
