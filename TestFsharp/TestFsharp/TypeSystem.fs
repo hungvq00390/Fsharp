@@ -164,7 +164,7 @@ let rec CanonicalTemp (s:char list) =
  match s with
  | [] -> []
  | '#'::xs -> if (getNextSignal xs 1) = "#" then CanonicalTemp (stringList2charList ("#"+ (max (charListToInt (getValue xs)) (charListToInt(getNextValue xs 1))).ToString()::(CanonicalTemp(removeSignalValue xs 1)))) else "#"::CanonicalTemp xs
- | '+'::xs -> if (getNextSignal xs 1) = "+" then CanonicalTemp (stringList2charList ("+"+ (add (getValue xs) (getNextValue xs 1)).ToString()::(CanonicalTemp(removeSignalValue xs 2))))
+ | '+'::xs -> if (getNextSignal xs 1) = "+" then CanonicalTemp (stringList2charList ("+"+ (add (getValue xs) (getNextValue xs 1)).ToString()::(CanonicalTemp(removeSignalValue xs 1))))
                 else if (getNextSignal xs 1 = "#") && (getNextSignal xs 2 = "-") then CanonicalTemp (append (string2charlist(CanonicalTemp1 (getSignalValue s 3))) (removeSignalValue xs 3)) 
                        else "+"::CanonicalTemp xs
  | '-'::xs -> if (getNextSignal xs 1) = "-" then CanonicalTemp (stringList2charList ("-"+ (add (getValue xs) (getNextValue xs 1)).ToString()::(CanonicalTemp(removeSignalValue xs 2)))) else "-"::CanonicalTemp (xs)
@@ -176,7 +176,7 @@ let rec Canonical (s:string) = CanonicalTemp (string2charlist s) |> String.conca
 
 ////// Main Function //////
 
-let s10 = "#1#2-3+2+22+13#12-9#2+3#88-4";;
+let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
 let s20 = "#4#5+3#3-4";;
 let testCanonical = Canonical s10
 printfn "\nTest Canonical %s" (testCanonical);;
