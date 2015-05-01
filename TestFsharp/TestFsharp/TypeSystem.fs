@@ -43,7 +43,6 @@ let rec charlist2stringlist (s:char list) =
 let rec stringToInt s = System.Int32.Parse(s |> String.concat "")
 let rec charToInt s = System.Int32.Parse(charlist2stringlist(s) |> String.concat "")
 let rec stringList2String s = s |> String.concat ""
-
 let rec minus m n = m - n
 let rec max (a:int) (b:int) = if a > b then a else b
 
@@ -73,32 +72,35 @@ let rec getValue (s1:char list) =
 //Join function
 let rec change (h:int) = if (h> 0) then ":1"::change (h-1) else [""]
 
-let rec joinTemp (s1:char list) (s2:char list) =
+let rec joinTemp1 (s1:char list) (s2:char list) =
  match s1 with
  | [] -> change (charToInt s2)
- | x::xs -> if (isSignal x) then change (charToInt s2) else joinTemp xs (x::s2) 
+ | x::xs -> if (isSignal x) then change (charToInt s2) else joinTemp1 xs (x::s2) 
 
-let rec join (s1:char list) =
+let rec joinTemp (s1:char list) =
  match s1 with
  | [] -> [""]
- | x::xs -> if (isSignal x) then if x = '-' then append (joinTemp xs []) (join (removeValue xs))  else x.ToString()::join xs 
-             else x.ToString()::join xs
-printfn "Test Join %A" (join s5 |> String.concat "");;
+ | x::xs -> if (isSignal x) then if x = '-' then append (joinTemp1 xs []) (joinTemp (removeValue xs))  else x.ToString()::joinTemp xs 
+             else x.ToString()::joinTemp xs
+
+let rec join (s:string) = joinTemp (string2char s) |> String.concat ""
 //End Join function
 
 //Start Merge function
 let rec add (m:char list) (n:char list) = (charToInt(getValue(m)) + charToInt(getValue(n))).ToString()
 
-let rec mergeTemp s1 s2 = 
+let rec mergeTemp1 s1 s2 = 
   match s1 with 
   | [] -> [""]
   | x::xs -> match s2 with 
                 | [] ->  [""]
-                | x2 :: xs2 -> if isSignal x && isSignal x2 then x.ToString() :: (mergeTemp xs xs2)
-                               else (add (x::xs) (x2::xs2))::(mergeTemp (removeValue(x::xs)) (removeValue(x2::xs2)))
+                | x2 :: xs2 -> if isSignal x && isSignal x2 then x.ToString() :: (mergeTemp1 xs xs2)
+                               else (add (x::xs) (x2::xs2))::(mergeTemp1 (removeValue(x::xs)) (removeValue(x2::xs2)))
 
-let rec merge s1 s2 = if (sign s1) = (sign s2) then mergeTemp s1 s2
-                       else ["Fail, can not merge 2 string"]
+let rec mergeTemp s1 s2 = if (sign s1) = (sign s2) then mergeTemp1 s1 s2
+                            else ["Fail, can not merge 2 string"]
+
+let rec merge (s:string) (s1:string) = mergeTemp (string2char s) (string2char s1) |> String.concat ""
 //End Merge function
 
 let rec getNextSignal s = 
@@ -118,18 +120,36 @@ let rec removeSignalValue s h =
 
 let s7 = ['#';'1';'#';'2';'-';'3';'+';'2';'+';'2';'2']
 //Start Canonical function
-let rec Canonical (s:char list) = 
+let rec CanonicalTemp (s:char list) = 
  match s with
  | [] -> []
- | '#'::xs -> if (getNextSignal xs) = "#" then "#"+ (max (charToInt (getValue xs)) (charToInt(getNextValue xs))).ToString()::(Canonical(removeSignalValue xs 2)) else "#"::Canonical xs
- | '+'::xs -> if (getNextSignal xs) = "+" then "+"+ (add (getValue xs) (getNextValue xs)).ToString()::(Canonical(removeSignalValue xs 2)) else "+"::Canonical xs
- | '-'::xs -> if (getNextSignal xs) = "-" then "-"+ (add (getValue xs) (getNextValue xs)).ToString()::(Canonical(removeSignalValue xs 2)) else "-"::Canonical xs
- | x::xs -> x.ToString()::Canonical xs
+ | '#'::xs -> if (getNextSignal xs) = "#" then "#"+ (max (charToInt (getValue xs)) (charToInt(getNextValue xs))).ToString()::(CanonicalTemp(removeSignalValue xs 2)) else "#"::CanonicalTemp xs
+ | '+'::xs -> if (getNextSignal xs) = "+" then "+"+ (add (getValue xs) (getNextValue xs)).ToString()::(CanonicalTemp(removeSignalValue xs 2)) else "+"::CanonicalTemp xs
+ | '-'::xs -> if (getNextSignal xs) = "-" then "-"+ (add (getValue xs) (getNextValue xs)).ToString()::(CanonicalTemp(removeSignalValue xs 2)) else "-"::CanonicalTemp xs
+ | x::xs -> x.ToString()::CanonicalTemp xs
 
-printfn "\nTest Canonical %s" (stringList2String (Canonical s7));;
+let rec Canonical (s:string) = CanonicalTemp (string2char s) |> String.concat ""
+
 //End Canonical funtion
 
-printfn "\nTest Merge %s" (stringList2String(merge s1 s2));;
+////// Main Function //////
+
+let s10 = "#1#2-3+2+22";;
+let testCanonical = Canonical s10
+printfn "\nTest Canonical %s" (testCanonical);;
+
+let s11 = "#1#2-3+2+22";;
+let s12 = "#1#2-3+2+22";;
+let testMerge = merge s11 s12
+printfn "\nTest Merge %s" (testMerge);;
+
+let s13 = "#1#2-3+2+22-3-2";;
+let testJoin = join s13
+printfn "\nTest join %s" (testJoin);;
+
+///// End Main Function /////
+
+
 
 let pause () =  
   match System.Diagnostics.Debugger.IsAttached with  
