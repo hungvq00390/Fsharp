@@ -83,7 +83,7 @@ let rec joinTemp (s1:char list) =
  | x::xs -> if (isSignal x) then if x = '-' then append (joinTemp1 xs []) (joinTemp (removeValue xs))  else x.ToString()::joinTemp xs 
              else x.ToString()::joinTemp xs
 
-let rec join (s:string) = joinTemp (string2char s) |> String.concat ""
+let rec Join (s:string) = joinTemp (string2char s) |> String.concat ""
 //End Join function
 
 //Start Merge function
@@ -100,7 +100,7 @@ let rec mergeTemp1 s1 s2 =
 let rec mergeTemp s1 s2 = if (sign s1) = (sign s2) then mergeTemp1 s1 s2
                             else ["Fail, can not merge 2 string"]
 
-let rec merge (s:string) (s1:string) = mergeTemp (string2char s) (string2char s1) |> String.concat ""
+let rec Merge (s:string) (s1:string) = mergeTemp (string2char s) (string2char s1) |> String.concat ""
 //End Merge function
 
 let rec getNextSignal s = 
@@ -140,11 +140,11 @@ printfn "\nTest Canonical %s" (testCanonical);;
 
 let s11 = "#1#2-3+2+22";;
 let s12 = "#1#2-3+2+22";;
-let testMerge = merge s11 s12
+let testMerge = Merge s11 s12
 printfn "\nTest Merge %s" (testMerge);;
 
 let s13 = "#1#2-3+2+22-3-2";;
-let testJoin = join s13
+let testJoin = Join s13
 printfn "\nTest join %s" (testJoin);;
 
 ///// End Main Function /////
