@@ -1,4 +1,5 @@
 ﻿module CoreTypeSystem
+open Microsoft.FSharp.Collections
 type Tag =
    | Plus = 0
    | Minus = 1
@@ -33,6 +34,28 @@ let rec seq (lst: TagSeq) : TagSeq =
         let m = min n1 n2 in seq ((Tag.Plus,n1-m)::(Tag.Max, n+m)::(Tag.Max,n2-m)::xs) 
     | x::xs -> x :: (seq xs)
 
+// Start Canonical function
+let rec CanonicalTemp (lst1: TagNum) (lst2: TagNum) (lst3: TagNum) : TagSeq =
+    if  (snd lst1) > (snd lst3) then (Tag.Plus, ((snd lst1) - (snd lst3)))::[Tag.Max, ((snd lst2) + (snd lst1))]
+        else if (snd lst1) = (snd lst3) then [Tag.Max, (snd lst2) + (snd lst1)]
+                else (Tag.Max, snd lst2 + snd lst1) :: [Tag.Minus, ((snd lst3) - (snd lst1))]
+
+// Define Canonical function
+let rec Canonical (lst1: TagSeq) : TagSeq =
+    match lst1 with 
+    | [] -> []
+    | (Tag.Max, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Max then Canonical ((Tag.Max, max n1 (snd (List.head xs)))::Canonical (List.tail xs)) 
+                                                     else (Tag.Max, n1)::Canonical xs 
+                              else (Tag.Max, n1)::[]
+    | (Tag.Plus, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Plus then Canonical ((Tag.Plus, n1 + (snd (List.head xs)))::(List.tail xs)) 
+                                                       else if (xs.Length > 1) then if fst (List.head xs) = Tag.Max && fst (List.head(List.tail xs)) = Tag.Minus then Canonical (append (CanonicalTemp (Tag.Plus, n1) (List.head xs) (List.head(List.tail xs))) (List.tail xs))
+                                                                                        else (Tag.Plus, n1)::Canonical xs
+                                                            else xs
+                               else (Tag.Plus, n1)::[]
+    | (Tag.Minus, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Minus then Canonical ((Tag.Minus, n1 + (snd (List.head xs)))::(List.tail xs)) 
+                                                        else (Tag.Minus, n1)::Canonical xs
+                               else (Tag.Minus, n1)::[]
+    | x::xs -> [x]
 // Define join function
 let rec join (lst: TagSeq) : TagSeq =
     match lst with
@@ -68,40 +91,29 @@ let rec mergeNew (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
 
 // Define Join commit function
 let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
-    let rev1 = List.rev lst1 in
-    let tag1 = fst (List.head rev1) in
-    let tag2 = fst (List.head lst2) in
-    [] //todo
+    match lst1 with
+    | [] -> []
+    | (Tag.Plus,m1)::[] -> match lst2 with
+                           | [] -> []
+                           | (Tag.Max,n1)::(Tag.Join,n2)::xs2 -> if m1 > 1 then jc [(Tag.Plus,m1-1)] (Canonical((Tag.Max,n1+n2) :: xs2)) else (Tag.Max,n1+n2) :: xs2
+                           | x::xs -> []
+    | x::xs -> []
+
+// Define Choice function
+let rec choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
+    match lst1 with
+    | [] -> []
+    | x::xs -> match  lst2 with
+               | [] -> []
+               | x2::xs2 -> if (fst x) = (fst x2) && (xs = xs2) && (fst x) = Tag.Max then if (snd x >= snd x2) then lst1 else lst2
+                              else []
 
 let rec getNextTag (lst1: TagSeq) : TagSeq =
     match lst1 with
     | [] -> []
     | x::xs -> [fst x,1]
 
-let rec CanonicalTemp (lst1: TagNum) (lst2: TagNum) (lst3: TagNum) : TagSeq =
-    if  (snd lst1) > (snd lst3) then (Tag.Plus, ((snd lst1) - (snd lst3)))::[Tag.Max, ((snd lst2) + (snd lst1))]
-        else if (snd lst1) = (snd lst3) then [Tag.Max, (snd lst2) + (snd lst1)]
-                else (Tag.Max, snd lst2 + snd lst1) :: [Tag.Minus, ((snd lst3) - (snd lst1))]
-
-// Define Canonical function
-let rec Canonical (lst1: TagSeq) : TagSeq =
-    match lst1 with 
-    | [] -> []
-    | (Tag.Max, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Max then Canonical ((Tag.Max, max n1 (snd (List.head xs)))::Canonical (List.tail xs)) 
-                                                     else (Tag.Max, n1)::Canonical xs 
-                              else (Tag.Max, n1)::[]
-    | (Tag.Plus, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Plus then Canonical ((Tag.Plus, n1 + (snd (List.head xs)))::(List.tail xs)) 
-                                                       else if (xs.Length > 1) then if fst (List.head xs) = Tag.Max && fst (List.head(List.tail xs)) = Tag.Minus then Canonical (append (CanonicalTemp (Tag.Plus, n1) (List.head xs) (List.head(List.tail xs))) (List.tail xs))
-                                                                                        else (Tag.Plus, n1)::Canonical xs
-                                                            else xs
-                               else (Tag.Plus, n1)::[]
-    | (Tag.Minus, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Minus then Canonical ((Tag.Minus, n1 + (snd (List.head xs)))::(List.tail xs)) 
-                                                        else (Tag.Minus, n1)::Canonical xs
-                               else (Tag.Minus, n1)::[]
-    | x::xs -> []
-
 ///// Test Mainfunction /////
-
 let isTag tag = if (tag = '+' || tag = '-' || tag = '#' || tag = ':') then true else false
 let rec removeValue (chrlst:char list) =
  match chrlst with
@@ -145,6 +157,7 @@ let rec string2Type str : TagSeq = charList2type (string2charlist str)
 ///// Test /////
 let s13 = "-1#2-3+2+22-3-2";;
 printfn "Test Join %A" (type2string (join (string2Type s13)));
+printfn "Test e55 %A" (type2string e55);
 
 let s11 = "#1#2:3";;
 let s12 = "#1#2:3";;
@@ -154,7 +167,11 @@ printfn "\nTest Merge %s" (type2string (testMerge));;
 let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
 let s14 = "#4#5+3#3-4";;
 let testCanonical = Canonical (string2Type s14)
-printfn "\nTest Canonical %s" (type2string (testCanonical));;
+
+let s15 = "+2";;
+let s16 = "#5:3#4:3";;
+let testJoinCommit = jc (string2Type s15) (string2Type s16)
+printfn "\nTest JoinCommit %s" (type2string (testJoinCommit));;
 ///// End Main Function /////
 
 let pause () =  
