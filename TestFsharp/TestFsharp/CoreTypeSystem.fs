@@ -53,12 +53,12 @@ let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
     | [] -> []
     | (Tag.Plus,m1)::[] -> match lst2 with
                            | [] -> []
-                           | (Tag.Max,n1)::(Tag.Join,n2)::xs2 -> if m1 > 1 then jc [(Tag.Plus,m1-1)] (Canonical((Tag.Max,n1+n2) :: xs2)) else (Tag.Max,n1+n2) :: xs2
+                           | (Tag.Max,n1)::(Tag.Join,n2)::xs2 -> if m1 > 1 then jc [(Tag.Plus,m1-1)] (seq((Tag.Max,n1+n2) :: xs2)) else (Tag.Max,n1+n2) :: xs2
                            | x::xs -> []
     | x::xs -> []
 
 // Define Choice function
-let rec choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
+let choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
     match lst1 with
     | [] -> []
     | x::xs -> match  lst2 with
