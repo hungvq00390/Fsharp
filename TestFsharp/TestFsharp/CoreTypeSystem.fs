@@ -29,28 +29,6 @@ let rec seq (lst: TagSeq) : TagSeq =
         let m = min n1 n2 in seq ((Tag.Plus,n1-m)::(Tag.Max, n+m)::(Tag.Minus,n2-m)::xs) 
     | x::xs -> x :: (seq xs)
 
-// Start Canonical function
-let rec CanonicalTemp (lst1: TagNum) (lst2: TagNum) (lst3: TagNum) : TagSeq =
-    if  (snd lst1) > (snd lst3) then (Tag.Plus, ((snd lst1) - (snd lst3)))::[Tag.Max, ((snd lst2) + (snd lst1))]
-        else if (snd lst1) = (snd lst3) then [Tag.Max, (snd lst2) + (snd lst1)]
-                else (Tag.Max, snd lst2 + snd lst1) :: [Tag.Minus, ((snd lst3) - (snd lst1))]
-
-// Define Canonical function
-let rec Canonical (lst1: TagSeq) : TagSeq =
-    match lst1 with 
-    | [] -> []
-    | (Tag.Max, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Max then Canonical ((Tag.Max, max n1 (snd (List.head xs)))::Canonical (List.tail xs)) 
-                                                     else (Tag.Max, n1)::Canonical xs 
-                              else (Tag.Max, n1)::[]
-    | (Tag.Plus, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Plus then Canonical ((Tag.Plus, n1 + (snd (List.head xs)))::(List.tail xs)) 
-                                                       else if (xs.Length > 1) then if fst (List.head xs) = Tag.Max && fst (List.head(List.tail xs)) = Tag.Minus then Canonical (List.append (CanonicalTemp (Tag.Plus, n1) (List.head xs) (List.head(List.tail xs))) (List.tail xs))
-                                                                                        else (Tag.Plus, n1)::Canonical xs
-                                                            else xs
-                               else (Tag.Plus, n1)::[]
-    | (Tag.Minus, n1)::xs -> if (xs.Length > 0) then if fst (List.head xs) = Tag.Minus then Canonical ((Tag.Minus, n1 + (snd (List.head xs)))::(List.tail xs)) 
-                                                        else (Tag.Minus, n1)::Canonical xs
-                               else (Tag.Minus, n1)::[]
-    | x::xs -> [x]
 // Define join function
 let rec join (lst: TagSeq) : TagSeq =
     match lst with
