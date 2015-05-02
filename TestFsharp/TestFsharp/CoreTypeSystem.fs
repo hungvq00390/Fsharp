@@ -18,6 +18,7 @@ let rec seq (lst: TagSeq) : TagSeq =
     | [] -> []
     | (_, 0)::xs -> seq xs
     | (Tag.Plus, n1)::(Tag.Plus, n2) :: xs -> seq ((Tag.Plus,n1+n2)::xs)
+    | (Tag.Max, n1)::(Tag.Max, n2) :: xs -> seq ((Tag.Max,max n1 n2)::seq xs)
     | (Tag.Minus, n1)::(Tag.Minus, n2) :: xs -> seq ((Tag.Minus,n1+n2)::xs)
     | (Tag.Plus, n1)::(Tag.Minus, n2) :: xs -> 
         if n1 >= n2 then 
@@ -25,7 +26,7 @@ let rec seq (lst: TagSeq) : TagSeq =
         else 
             seq ((Tag.Max,n1)::(Tag.Minus,n2-n1)::xs) 
     | (Tag.Plus, n1)::(Tag.Max, n)::(Tag.Minus, n2) :: xs -> 
-        let m = min n1 n2 in seq ((Tag.Plus,n1-m)::(Tag.Max, n+m)::(Tag.Max,n2-m)::xs) 
+        let m = min n1 n2 in seq ((Tag.Plus,n1-m)::(Tag.Max, n+m)::(Tag.Minus,n2-m)::xs) 
     | x::xs -> x :: (seq xs)
 
 // Start Canonical function
