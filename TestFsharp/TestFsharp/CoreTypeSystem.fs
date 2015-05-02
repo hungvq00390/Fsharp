@@ -58,7 +58,8 @@ let rec join (lst: TagSeq) : TagSeq =
     | x::xs -> x::(join xs)
 
 // Define Merge function
-let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
+let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq = 
+    if lst1.Length <= 0 || lst2.Length <= 0 then [] else
     let tag1 = fst (List.head lst1) in
     let tag2 = fst (List.head lst2) in
     if tag1 = Tag.Max && tag2 = Tag.Max then (Tag.Max, (snd (List.head lst1)) + (snd (List.head lst2))) :: (merge (List.tail lst1) (List.tail lst2))
@@ -66,22 +67,6 @@ let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
     else if tag1 = Tag.Max && tag2 = Tag.Join then (Tag.Join, snd (List.head lst1)) :: (merge (List.tail lst1) lst2) 
     else if tag1 = Tag.Join && tag2 = Tag.Max then (Tag.Join, snd (List.head lst2)) :: (merge lst1 (List.tail lst2)) 
     else failwith "Error in merge"
-
-let rec getTotalSign (lst: TagSeq) = 
-    match lst with
-     | [] -> []
-     | (Tag.Plus, n1)::xs -> (Tag.Plus, 1) :: getTotalSign xs
-     | (Tag.Minus, n1)::xs -> (Tag.Minus, 1) :: getTotalSign xs
-     | (Tag.Max, n1)::xs -> (Tag.Max, 1) :: getTotalSign xs
-     | (Tag.Join, n1)::xs -> (Tag.Join, 1) :: getTotalSign xs
-     | x::xs -> []
-
-let rec mergeNew (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
-    match lst1 with 
-    | [] -> []
-    | x::xs -> match lst2 with
-                | [] -> []
-                | x2::xs2 -> if (getTotalSign lst1) = (getTotalSign lst2) then (fst x, (snd x) + (snd x2))::mergeNew xs xs2 else []
 
 // Define Join commit function
 let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =

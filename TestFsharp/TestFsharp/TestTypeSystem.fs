@@ -53,7 +53,7 @@ printfn "Test Join %A" (type2string (join (string2Type s13)));
 
 let s11 = "#1#2:3";;
 let s12 = "#1#2:3";;
-let testMerge = mergeNew (string2Type s11) (string2Type s12)
+let testMerge = merge (string2Type s11) (string2Type s12)
 printfn "\nTest Merge %s" (type2string (testMerge));;
 
 let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
