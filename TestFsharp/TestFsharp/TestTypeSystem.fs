@@ -58,7 +58,8 @@ printfn "\nTest Merge %s" (type2string (testMerge));;
 
 let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
 let s14 = "#4#5+3#3-4";;
-let testCanonical = seq (string2Type s14)
+let s17 = "+1+1+1-1-1-1";;
+let testCanonical = seq (string2Type s17)
 printfn "\nTest Canonical %s" (type2string (testCanonical));;
 
 let s15 = "+2";;
