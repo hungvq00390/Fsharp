@@ -38,7 +38,7 @@ let rec join (lst: TagSeq) : TagSeq =
 
 // Define Merge function
 let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq = 
-    if List.isEmpty(lst1) then lst2 else if List.isEmpty(lst2) then lst1 else
+    if List.isEmpty lst1 then lst2 else if List.isEmpty lst2 then lst1 else
     let tag1 = fst (List.head lst1) in
     let tag2 = fst (List.head lst2) in
     if tag1 = Tag.Max && tag2 = Tag.Max then (Tag.Max, (snd (List.head lst1)) + (snd (List.head lst2))) :: (merge (List.tail lst1) (List.tail lst2))
