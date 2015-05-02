@@ -10,6 +10,10 @@ type TagNum = Tag * int
 
 type TagSeq = TagNum list
 
+type Tree = 
+   | Branch of Tree list
+   | Leaf of TagNum 
+
 let e55 = [(Tag.Plus,1); (Tag.Plus,1); (Tag.Minus,3);(Tag.Plus,1);(Tag.Minus,1);(Tag.Plus,1);(Tag.Minus,1);]
 
 // Define seq function
@@ -26,7 +30,9 @@ let rec seq (lst: TagSeq) : TagSeq =
         else 
             seq ((Tag.Max,n1)::(Tag.Minus,n2-n1)::xs) 
     | (Tag.Plus, n1)::(Tag.Max, n)::(Tag.Minus, n2) :: xs -> 
-        let m = min n1 n2 in seq ((Tag.Plus,n1-m)::(Tag.Max, n+m)::(Tag.Minus,n2-m)::xs) 
+        let m = min n1 n2 in if n1 > n2 then seq ((Tag.Plus,n1-m)::(Tag.Max, n+m)::xs) 
+                                else if n1 = n2 then seq ((Tag.Max, n+m)::xs) 
+                                        else seq ((Tag.Max, n+m)::(Tag.Minus,n2-m)::xs) 
     | x::xs -> x :: (seq xs)
 
 // Define join function
@@ -38,13 +44,15 @@ let rec join (lst: TagSeq) : TagSeq =
 
 // Define Merge function
 let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq = 
-    if List.isEmpty lst1 then lst2 else if List.isEmpty lst2 then lst1 else
+    if List.isEmpty lst1 then lst2 
+        elif List.isEmpty lst2 then lst1 
+       else
     let tag1 = fst (List.head lst1) in
     let tag2 = fst (List.head lst2) in
     if tag1 = Tag.Max && tag2 = Tag.Max then (Tag.Max, (snd (List.head lst1)) + (snd (List.head lst2))) :: (merge (List.tail lst1) (List.tail lst2))
-    else if tag1 = Tag.Join && tag2 = Tag.Join then (Tag.Join, (snd (List.head lst1)) + (snd (List.head lst2))) :: (merge (List.tail lst1) (List.tail lst2)) 
-    else if tag1 = Tag.Max && tag2 = Tag.Join then (Tag.Join, snd (List.head lst1)) :: (merge (List.tail lst1) lst2) 
-    else if tag1 = Tag.Join && tag2 = Tag.Max then (Tag.Join, snd (List.head lst2)) :: (merge lst1 (List.tail lst2)) 
+    elif tag1 = Tag.Join && tag2 = Tag.Join then (Tag.Join, (snd (List.head lst1)) + (snd (List.head lst2))) :: (merge (List.tail lst1) (List.tail lst2)) 
+    elif tag1 = Tag.Max && tag2 = Tag.Join then (Tag.Join, snd (List.head lst1)) :: (merge (List.tail lst1) lst2) 
+    elif tag1 = Tag.Join && tag2 = Tag.Max then (Tag.Max, snd (List.head lst2)) :: (merge lst1 (List.tail lst2)) 
     else failwith "Error in merge"
 
 // Define Join commit function
