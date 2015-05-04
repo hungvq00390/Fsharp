@@ -64,19 +64,31 @@ printfn "Test Join %A" (type2string (join (string2Type s13)));
 let s11 = "#2:1:1:1";;
 let s12 = "#0:1#3:1#4:1";;
 let testMerge = merge (string2Type s11) (string2Type s12)
-printfn "\nTest Merge %s" (type2string (testMerge));;
+printfn "Test Merge %s" (type2string (testMerge));;
 
 let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
 let s14 = "#4#5+3#3-4";;
 let s17 = "-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1";;
 let testCanonical = seq (string2Type s14)
-printfn "\nTest Canonical %s" (type2string (testCanonical));;
+printfn "Test Canonical %s" (type2string (testCanonical));;
 
 let s15 = "+1";;
 let s16 = "#2:2#3:2#4:2";;
 let testJoinCommit = jc (string2Type s15) (string2Type s16)
-printfn "\nTest JoinCommit %s" (type2string (testJoinCommit));;
+printfn "Test JoinCommit %s" (type2string (testJoinCommit));;
 // End Test manual
+
+
+// Test paper:
+
+let step1 = join(seq (string2Type ("+1+1-1-1-1-1-1")));;  //#2:1:1:1
+let step2 = merge (prep(step1)) (prep(join(seq(string2Type ("-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1"))))) //-1#3-1#4-1  -> #2:2#3:2#4:2
+let step3 = seq (jc (string2Type ("+1")) step2) //#4:2#4:2
+let step4 = merge (prep(join(seq(string2Type ("+1-1-1-1"))))) (prep(step3))  //#5:3#4:3 
+let step5 = jc (string2Type ("+2")) step4
+
+printfn "\nTest Step %s" (type2string (step5));;
+// End Test Paper
  
 
 // Unit Test

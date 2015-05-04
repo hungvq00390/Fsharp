@@ -57,9 +57,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <Compile Include="CoreTypeSystem.fs" />
+    <Compile Include="AST.fs" />
     <Compile Include="TestTypeSystem.fs" />
     <None Include="packages.config" />
-    <Compile Include="AST.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
