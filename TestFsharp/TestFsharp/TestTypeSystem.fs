@@ -88,8 +88,17 @@ let step4 = merge (prep(join(seq(string2Type ("+1-1-1-1"))))) (prep(step3))  //#
 let step5 = jc (string2Type ("+2")) step4
 
 printfn "\nTest Step %s" (type2string (step5));;
+
+let step1a = join(seq (string2Type ("-1")));;
+let step2a = merge step1a (prep(join(seq(string2Type("-1")))))
+let step3a = seq (jc (string2Type ("+1#1")) step2a)
+
+
+printfn "\nTest Step %s" (type2string (step3a));;
+
 // End Test Paper
- 
+
+//+1+1-1(-1)-1 
 
 // Unit Test
  [<TestCaseSource("TestCases")>]
