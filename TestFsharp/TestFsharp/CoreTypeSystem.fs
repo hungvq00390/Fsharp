@@ -79,7 +79,9 @@ let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
 // Define join commit function
 let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
     match lst1 with
-    | [] -> if List.isEmpty lst2 then [] else lst2
+    | [] -> if List.isEmpty lst2 then 
+                [] 
+            else lst2
     | (Tag.Plus,m1)::[] -> 
         match lst2 with
         | [] -> lst1
@@ -88,7 +90,12 @@ let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
                 jc [(Tag.Plus,m1-1)] (seq((Tag.Max,l1+l2) :: xs2)) 
             else 
                 (Tag.Max,l1+l2) :: xs2
-        | x::xs -> []
+         |(Tag.Join, l2)::xs2 -> 
+                if m1 > 1 then 
+                    jc [(Tag.Plus, m1-1)] (seq ((Tag.Max, l2) :: xs2)) 
+                else 
+                    (Tag.Max, l2) :: xs2
+        | otherwise -> failwith "Need attention in jc 1"
     | (Tag.Plus,n1)::(Tag.Max,n2)::[] -> 
         match lst2 with
         | [] -> lst1
@@ -97,7 +104,12 @@ let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
                 jc ((Tag.Plus,(n1-1)) :: [Tag.Max,(max (n2+1) (l1+l2))]) xs2 
             else 
                 jc [Tag.Join,max (n2+1) (l1+l2)] xs2
-        | x::xs -> [] 
+        | (Tag.Join, l2)::xs2 -> 
+                if n1 > 1 then 
+                    jc [(Tag.Plus, n1-1)] (seq ((Tag.Max, l2) :: xs2)) 
+                else 
+                    (Tag.Max, max (n2+1) l2) :: xs2
+        | otherwise -> failwith "Need attention in jc 2"
     | x::xs -> []
 
 // Define choice function
