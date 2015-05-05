@@ -54,7 +54,7 @@ let rec join (lst: TagSeq) : TagSeq =
 // Define prepare function
 let rec prep (lst1:TagSeq) :TagSeq = 
     if List.isEmpty lst1 then 
-        []
+            []
         elif fst (List.head lst1) <> Tag.Max then 
             (Tag.Max,0) :: lst1 
     else lst1
@@ -91,10 +91,10 @@ let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
             else 
                 (Tag.Max,l1+l2) :: xs2
          |(Tag.Join, l2)::xs2 -> 
-                if m1 > 1 then 
-                    jc [(Tag.Plus, m1-1)] (seq ((Tag.Max, l2) :: xs2)) 
-                else 
-                    (Tag.Max, l2) :: xs2
+            if m1 > 1 then 
+                jc [(Tag.Plus, m1-1)] (seq ((Tag.Max, l2) :: xs2)) 
+            else 
+                (Tag.Max, l2) :: xs2
         | otherwise -> failwith "Need attention in jc 1"
     | (Tag.Plus,n1)::(Tag.Max,n2)::[] -> 
         match lst2 with
@@ -105,17 +105,20 @@ let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
             else 
                 jc [Tag.Join,max (n2+1) (l1+l2)] xs2
         | (Tag.Join, l2)::xs2 -> 
-                if n1 > 1 then 
-                    jc [(Tag.Plus, n1-1)] (seq ((Tag.Max, l2) :: xs2)) 
-                else 
-                    (Tag.Max, max (n2+1) l2) :: xs2
+            if n1 > 1 then 
+                jc [(Tag.Plus, n1-1)] (seq ((Tag.Max, l2) :: xs2)) 
+            else 
+                (Tag.Max, max (n2+1) l2) :: xs2
         | otherwise -> failwith "Need attention in jc 2"
     | x::xs -> []
 
 // Define choice function
 let choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
     match lst1 with
-    | [] -> if List.isEmpty lst2 then [] else lst2
+    | [] -> if List.isEmpty lst2 then 
+                [] 
+            else 
+                lst2
     | x::xs -> 
         match  lst2 with
         | [] -> lst1
