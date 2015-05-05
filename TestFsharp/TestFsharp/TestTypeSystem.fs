@@ -2,6 +2,7 @@
 open CoreTypeSystem
 open NUnit.Framework
 open FsUnit
+open AST
 
 // Test Common function
 
@@ -87,14 +88,14 @@ let step3 = seq (jc (string2Type ("+1")) step2) //#4:2#4:2
 let step4 = merge (prep(join(seq(string2Type ("+1-1-1-1"))))) (prep(step3))  //#5:3#4:3 
 let step5 = jc (string2Type ("+2")) step4
 
-printfn "\nTest Step %s" (type2string (step5));;
+printfn "\nTest Example 1: %s" (type2string (step5));;
 
 let step1a = join(seq (string2Type ("-1")));;
 let step2a = merge step1a (prep(join(seq(string2Type("-1")))))
 let step3a = seq (jc (string2Type ("+1#1")) step2a)
 
 
-printfn "\nTest Step %s" (type2string (step3a));;
+printfn "Test Example 2: %s\n" (type2string (step3a));;
 
 // End Test Paper
 
@@ -123,6 +124,36 @@ let checkCanonical2 = type2string (seq (string2Type strTest4b)) |> should equal 
 let strTest5 = "+1";;
 let strTest6 = "#2:2#3:2#4:2";;
 let checkJoinCommit = type2string (jc (string2Type strTest5) (string2Type strTest6)) |> should equal "#4#3:2#4:2"
+
+
+//+1-1
+//let ast1 = [Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1)]
+
+//+1+1-1-1
+//let ast1 = [Leaf (Tag.Plus, 1); Leaf (Tag.Plus, 1);Leaf (Tag.Minus, 1);Leaf (Tag.Minus, 1)]
+
+//+1(-1)-1
+//let ast1 = [Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
+
+//+1+1-1 (-1)-1
+//let ast1 = [Leaf (Tag.Plus, 1); Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1);Branch ([Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
+
+//+1(+1-1-1) -1
+//let ast1 = [Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
+
+//+2(+2-2-2) -2
+//let ast1 = [Leaf (Tag.Plus, 2); Branch ([Leaf (Tag.Plus, 2); Leaf (Tag.Minus, 2); Leaf (Tag.Minus, 2)]); Leaf (Tag.Minus, 2)] 
+
+//+2(+1-1-1-1)-1-1
+//let ast1 = [Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1);Leaf (Tag.Minus, 1)] 
+
+
+//+2(+1-1-1-1)+1(#2-1-1-1)-1#3-1#4-1
+let ast1 = [Leaf (Tag.Plus, 2); Branch ([Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Plus, 2); Leaf (Tag.Minus, 2); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1); Leaf (Tag.Plus, 3); Leaf (Tag.Minus, 3);Leaf (Tag.Minus, 1);Leaf (Tag.Plus, 4); Leaf (Tag.Minus, 4);Leaf (Tag.Minus, 1)] 
+let ast2 = [Leaf (Tag.Plus,1); Leaf (Tag.Plus,1); Leaf (Tag.Minus,1); Branch ([Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)]
+
+printfn "infer 1: %A = %A" ast1 (infer ast1 []);;
+printfn "infer 2: %A = %A" ast2 (infer ast2 []);;
 
 // Pause terminal
 let pause () =  

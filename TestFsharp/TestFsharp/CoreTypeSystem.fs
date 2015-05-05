@@ -53,7 +53,11 @@ let rec join (lst: TagSeq) : TagSeq =
 
 // Define prepare function
 let rec prep (lst1:TagSeq) :TagSeq = 
-    if fst (List.head lst1) <> Tag.Max then (Tag.Max,0) :: lst1 else lst1
+    if List.isEmpty lst1 then 
+        []
+        elif fst (List.head lst1) <> Tag.Max then 
+            (Tag.Max,0) :: lst1 
+    else lst1
 
 // Define merge function
 let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq = 
@@ -99,10 +103,10 @@ let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
 // Define choice function
 let choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
     match lst1 with
-    | [] -> []
+    | [] -> if List.isEmpty lst2 then [] else lst2
     | x::xs -> 
         match  lst2 with
-        | [] -> []
+        | [] -> lst1
         | x2::xs2 -> 
             if (fst x) = (fst x2) && (xs = xs2) && (fst x) = Tag.Max then 
                 if (snd x >= snd x2) then 
@@ -110,3 +114,4 @@ let choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
                 else 
                     lst2
             else []
+

@@ -57,8 +57,8 @@
   <ItemGroup>
     <None Include="App.config" />
     <Compile Include="CoreTypeSystem.fs" />
-    <Compile Include="TestTypeSystem.fs" />
     <Compile Include="AST.fs" />
+    <Compile Include="TestTypeSystem.fs" />
     <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
