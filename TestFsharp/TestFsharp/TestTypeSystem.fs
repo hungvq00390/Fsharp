@@ -26,17 +26,21 @@ let rec removeValue (chrlst:char list) =
             x::xs 
         else removeValue xs
 
+//Check is end branch or not
 let isEndBranch x = 
     if (x = ')') then 
         true 
     else 
         false
+
+//Check is start branch or not
 let isStartBranch x = 
     if (x = '(') then 
         true 
     else 
         false
 
+//Get remain item after a branch
 let rec removeBranch (chrlst:char list) (total:int)=
     match chrlst with
     | [] -> []
@@ -67,61 +71,25 @@ let rec charList2String s = charlist2stringlist(s) |> String.concat ""
 
 // Change char list to TagSeq list
 let rec charList2type (chrlst:char list) : TagSeq=
- match chrlst with
- | [] -> []
- | '+'::xs -> (Tag.Plus, charListToInt(getValue xs)):: charList2type (removeValue xs)
- | '-'::xs -> (Tag.Minus, charListToInt(getValue xs)):: charList2type (removeValue xs)
- | '#'::xs -> (Tag.Max, charListToInt(getValue xs)):: charList2type (removeValue xs)
- | ':'::xs -> (Tag.Join, charListToInt(getValue xs)):: charList2type (removeValue xs)
- | x::xs -> charList2type xs
+    match chrlst with
+    | [] -> []
+    | '+'::xs -> (Tag.Plus, charListToInt(getValue xs)):: charList2type (removeValue xs)
+    | '-'::xs -> (Tag.Minus, charListToInt(getValue xs)):: charList2type (removeValue xs)
+    | '#'::xs -> (Tag.Max, charListToInt(getValue xs)):: charList2type (removeValue xs)
+    | ':'::xs -> (Tag.Join, charListToInt(getValue xs)):: charList2type (removeValue xs)
+    | x::xs -> charList2type xs
 
 // Change TagSeq list to TFJ string
 let rec type2string (lst:TagSeq) : string =
- match lst with
- | [] -> ""
- | (Tag.Plus, n1)::xs -> "+" + n1.ToString() + type2string xs
- | (Tag.Minus, n1)::xs -> "-" + n1.ToString() + type2string xs
- | (Tag.Max, n1)::xs -> "#" + n1.ToString() + type2string xs
- | (Tag.Join, n1)::xs -> ":" + n1.ToString() + type2string xs
- | x::xs -> x.ToString() + type2string xs
+    match lst with
+    | [] -> ""
+    | (Tag.Plus, n1)::xs -> "+" + n1.ToString() + type2string xs
+    | (Tag.Minus, n1)::xs -> "-" + n1.ToString() + type2string xs
+    | (Tag.Max, n1)::xs -> "#" + n1.ToString() + type2string xs
+    | (Tag.Join, n1)::xs -> ":" + n1.ToString() + type2string xs
+    | x::xs -> x.ToString() + type2string xs
 
 let rec string2Type str : TagSeq = charList2type (string2charlist str);;
-
-// Test Manual
-//let s13 = "#2:1:1:1";;
-//printfn "Test Join %A" (type2string (join (string2Type s13)));
-//
-//let s11 = "#2:1:1:1";;
-//let s12 = "#0:1#3:1#4:1";;
-//let testMerge = merge (string2Type s11) (string2Type s12)
-//printfn "Test Merge %s" (type2string (testMerge));;
-//
-//let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
-//let s14 = "#4#5+3#3-4";;
-//let s17 = "-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1";;
-//let testCanonical = seq (string2Type s14)
-//printfn "Test Canonical %s" (type2string (testCanonical));;
-//
-//let s15 = "+1";;
-//let s16 = "#2:2#3:2#4:2";;
-//let testJoinCommit = jc (string2Type s15) (string2Type s16)
-//printfn "Test JoinCommit %s" (type2string (testJoinCommit));;
-// End Test manual
-
-// Test paper:
-//let step1 = join(seq (string2Type ("+1+1-1-1-1-1-1")));;  //#2:1:1:1
-//let step2 = merge (step1) (join(seq(string2Type ("-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1")))) //-1#3-1#4-1  -> #2:2#3:2#4:2
-//let step3 = seq (jc (string2Type ("+1")) step2) //#4:2#4:2
-//let step4 = merge (join(seq(string2Type ("+1-1-1-1")))) (step3)  //#5:3#4:3 
-//let step5 = jc (string2Type ("+2")) step4;;
-//printfn "\nTest Example 1: %s" (type2string (step5));;
-
-//let step1a = join(seq (string2Type ("-1")));;
-//let step2a = merge step1a (join(seq(string2Type("-1"))));;
-//let step3a = seq (jc (string2Type ("+1#1")) step2a);;
-//printfn "Test Example 2: %s\n" (type2string (step3a));;
-
-// End Test Paper
 
 // Unit Test
  [<TestCaseSource("TestCases")>]
@@ -193,17 +161,10 @@ let rec addTree (lst1: char list) : Tree list =
     | '('::xs -> List.append  [Branch (addTree xs)] (addTree (removeBranch xs 0))
     | ')'::xs -> []
     | x::xs -> addTree xs
-        
+
 let calculateTFJstring x = infer (addTree(string2charlist x)) []
 
 printfn "Result: %A" (calculateTFJstring "+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1");;
 
-
-// Pause terminal
-let pause () =  
-  match System.Diagnostics.Debugger.IsAttached with  
-  | true ->  
-      printfn "\nPress any key to continue."  
-      System.Console.ReadKey(true) |> ignore  
-  | false -> ()
-pause ()  
+printfn "\nPress any key to continue."  
+System.Console.ReadKey(true) |> ignore  
