@@ -85,50 +85,43 @@ let rec type2string (lst:TagSeq) : string =
  | (Tag.Join, n1)::xs -> ":" + n1.ToString() + type2string xs
  | x::xs -> x.ToString() + type2string xs
 
-let rec string2Type str : TagSeq = charList2type (string2charlist str)
+let rec string2Type str : TagSeq = charList2type (string2charlist str);;
 
 // Test Manual
-let s13 = "#2:1:1:1";;
-printfn "Test Join %A" (type2string (join (string2Type s13)));
-
-let s11 = "#2:1:1:1";;
-let s12 = "#0:1#3:1#4:1";;
-let testMerge = merge (string2Type s11) (string2Type s12)
-printfn "Test Merge %s" (type2string (testMerge));;
-
-let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
-let s14 = "#4#5+3#3-4";;
-let s17 = "-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1";;
-let testCanonical = seq (string2Type s14)
-printfn "Test Canonical %s" (type2string (testCanonical));;
-
-let s15 = "+1";;
-let s16 = "#2:2#3:2#4:2";;
-let testJoinCommit = jc (string2Type s15) (string2Type s16)
-printfn "Test JoinCommit %s" (type2string (testJoinCommit));;
+//let s13 = "#2:1:1:1";;
+//printfn "Test Join %A" (type2string (join (string2Type s13)));
+//
+//let s11 = "#2:1:1:1";;
+//let s12 = "#0:1#3:1#4:1";;
+//let testMerge = merge (string2Type s11) (string2Type s12)
+//printfn "Test Merge %s" (type2string (testMerge));;
+//
+//let s10 = "#1#2-3+2+22+13#12-9#2+3#12-4";;
+//let s14 = "#4#5+3#3-4";;
+//let s17 = "-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1";;
+//let testCanonical = seq (string2Type s14)
+//printfn "Test Canonical %s" (type2string (testCanonical));;
+//
+//let s15 = "+1";;
+//let s16 = "#2:2#3:2#4:2";;
+//let testJoinCommit = jc (string2Type s15) (string2Type s16)
+//printfn "Test JoinCommit %s" (type2string (testJoinCommit));;
 // End Test manual
 
-
 // Test paper:
+//let step1 = join(seq (string2Type ("+1+1-1-1-1-1-1")));;  //#2:1:1:1
+//let step2 = merge (step1) (join(seq(string2Type ("-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1")))) //-1#3-1#4-1  -> #2:2#3:2#4:2
+//let step3 = seq (jc (string2Type ("+1")) step2) //#4:2#4:2
+//let step4 = merge (join(seq(string2Type ("+1-1-1-1")))) (step3)  //#5:3#4:3 
+//let step5 = jc (string2Type ("+2")) step4;;
+//printfn "\nTest Example 1: %s" (type2string (step5));;
 
-let step1 = join(seq (string2Type ("+1+1-1-1-1-1-1")));;  //#2:1:1:1
-let step2 = merge (step1) (join(seq(string2Type ("-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1")))) //-1#3-1#4-1  -> #2:2#3:2#4:2
-let step3 = seq (jc (string2Type ("+1")) step2) //#4:2#4:2
-let step4 = merge (join(seq(string2Type ("+1-1-1-1")))) (step3)  //#5:3#4:3 
-let step5 = jc (string2Type ("+2")) step4
-
-printfn "\nTest Example 1: %s" (type2string (step5));;
-
-let step1a = join(seq (string2Type ("-1")));;
-let step2a = merge step1a (join(seq(string2Type("-1"))))
-let step3a = seq (jc (string2Type ("+1#1")) step2a)
-
-
-printfn "Test Example 2: %s\n" (type2string (step3a));;
+//let step1a = join(seq (string2Type ("-1")));;
+//let step2a = merge step1a (join(seq(string2Type("-1"))));;
+//let step3a = seq (jc (string2Type ("+1#1")) step2a);;
+//printfn "Test Example 2: %s\n" (type2string (step3a));;
 
 // End Test Paper
-
-//+1+1-1(-1)-1 
 
 // Unit Test
  [<TestCaseSource("TestCases")>]
@@ -166,7 +159,7 @@ let checkAST2 = type2string (infer ast2 []) |> should equal "#2"
 let ast3 = [Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
 let checkAST3 = type2string (infer ast3 []) |> should equal "#2"
 
-//+1+1-1 (-1)-1 -> #2
+//+1+1-1(-1)-1 -> #2
 let ast4 = [Leaf (Tag.Plus, 1); Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1);Branch ([Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
 let checkAST4 = type2string (infer ast4 []) |> should equal "#2"
 
@@ -174,7 +167,7 @@ let checkAST4 = type2string (infer ast4 []) |> should equal "#2"
 let ast5 = [Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
 let checkAST5 = type2string (infer ast5 []) |> should equal "#3"
 
-//+2(+2-2-2) -2   -> #6
+//+2(+2-2-2)-2   -> #6
 let ast6 = [Leaf (Tag.Plus, 2); Branch ([Leaf (Tag.Plus, 2); Leaf (Tag.Minus, 2); Leaf (Tag.Minus, 2)]); Leaf (Tag.Minus, 2)] 
 let checkAST6 = type2string (infer ast6 []) |> should equal "#6"
 
@@ -203,7 +196,7 @@ let rec addTree (lst1: char list) : Tree list =
         
 let calculateTFJstring x = infer (addTree(string2charlist x)) []
 
-printfn "infer 2: %A" (calculateTFJstring "+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1");;
+printfn "Result: %A" (calculateTFJstring "+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1");;
 
 
 // Pause terminal
