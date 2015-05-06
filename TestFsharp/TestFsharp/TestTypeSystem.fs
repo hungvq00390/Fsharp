@@ -12,26 +12,49 @@ let rec getNextTag (lst1: TagSeq) : TagSeq =
     | x::xs -> [fst x,1]
 
 // Check is this tag or not
-let isTag tag = if (tag = '+' || tag = '-' || tag = '#' || tag = ':') then true else false
+let isTag tag = if (tag = '+' || tag = '-' || tag = '#' || tag = ':' || tag = '(' || tag = ')') then 
+                    true 
+                else 
+                    false
 
 // Remove value of current tag
 let rec removeValue (chrlst:char list) =
- match chrlst with
- | [] -> []
- | x::xs -> if (isTag x) then x::xs else removeValue xs
+    match chrlst with
+    | [] -> []
+    | x::xs -> 
+        if (isTag x) then 
+            x::xs 
+        else removeValue xs
+
+let isEndBranch branch = 
+    if (branch = ')') then 
+        true 
+    else 
+        false
+
+let rec removeBranch (chrlst:char list) =
+    match chrlst with
+    | [] -> []
+    | x::xs -> 
+        if (isEndBranch x) then 
+            xs 
+        else removeBranch xs
 
 // Get value of current tag
 let rec getValue (chrlst:char list) =
- match chrlst with
- | [] -> []
- | x::xs -> if (isTag x) then [] else x::getValue xs
+    match chrlst with
+    | [] -> []
+    | x::xs -> 
+        if (isTag x) 
+            then [] 
+        else x::getValue xs
 
 // String to char list
 let string2charlist (str:string) = [for c in str -> c]
 let rec charlist2stringlist (s:char list) = 
- match s with 
- | [] -> []
- | x::xs -> x.ToString()::charlist2stringlist xs
+    match s with 
+    | [] -> []
+    | x::xs -> x.ToString()::charlist2stringlist xs
 let rec stringToInt str = System.Int32.Parse(str |> String.concat "")
 let rec charListToInt str = System.Int32.Parse(charlist2stringlist(str) |> String.concat "")
 let rec charList2String s = charlist2stringlist(s) |> String.concat ""
@@ -160,8 +183,22 @@ let checkAST8 = type2string (infer ast8 []) |> should equal "#11"
 let ast9 = [Leaf (Tag.Plus,1); Leaf (Tag.Plus,1); Leaf (Tag.Minus,1); Branch ([Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)]
 let checkAST9 = type2string (infer ast9 []) |> should equal "#2"
 
-printfn "infer 1: %A = %A" ast8 (infer ast8 []);;
-printfn "infer 2: %A = %A" ast9 (infer ast9 []);;
+//printfn "infer 1: %A = %A" ast8 (infer ast8 []);;
+//printfn "infer 2: %A = %A" ast9 (infer ast9 []);;
+
+let rec addTree (lst1: char list) : Tree list = 
+    match lst1 with
+    | [] -> []
+    | '-'::xs -> List.append [Leaf (Tag.Minus, charListToInt(getValue xs))] (addTree (removeValue xs))
+    | '+'::xs -> List.append [Leaf (Tag.Plus, charListToInt(getValue xs))] (addTree (removeValue xs))
+    | '('::xs -> List.append  [Branch (addTree xs)] (addTree (removeBranch xs))
+    | ')'::xs -> []
+    | x::xs -> addTree xs
+        
+let calculateTFJstring x = infer (addTree(string2charlist x)) []
+
+printfn "infer 2: %A" (calculateTFJstring "+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1");;
+
 
 // Pause terminal
 let pause () =  

@@ -71,7 +71,7 @@ let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
         elif tag1 = Tag.Join && tag2 = Tag.Join then 
             (Tag.Join, (snd (List.head lst1)) + (snd (List.head lst2))) :: (merge (List.tail lst1) (List.tail lst2)) 
         elif tag1 = Tag.Max && tag2 = Tag.Join then 
-            (Tag.Join, snd (List.head lst1)) :: (merge (List.tail lst1) lst2) 
+            (Tag.Max, snd (List.head lst1)) :: (merge (List.tail lst1) lst2) 
         elif tag1 = Tag.Join && tag2 = Tag.Max then 
             (Tag.Max, snd (List.head lst2)) :: (merge lst1 (List.tail lst2)) 
         else failwith "Error in merge"
