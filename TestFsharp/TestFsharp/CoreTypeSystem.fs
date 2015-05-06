@@ -51,14 +51,6 @@ let rec join (lst: TagSeq) : TagSeq =
             (join xs)
     | x::xs -> x::(join xs)
 
-// Define prepare function
-let rec prep (lst1:TagSeq) :TagSeq = 
-    if List.isEmpty lst1 then 
-            []
-        elif fst (List.head lst1) <> Tag.Max then 
-            (Tag.Max,0) :: lst1 
-    else lst1
-
 // Define merge function
 let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq = 
     if List.isEmpty lst1 then lst2 

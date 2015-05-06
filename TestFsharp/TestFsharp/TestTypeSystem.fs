@@ -106,15 +106,15 @@ printfn "Test JoinCommit %s" (type2string (testJoinCommit));;
 // Test paper:
 
 let step1 = join(seq (string2Type ("+1+1-1-1-1-1-1")));;  //#2:1:1:1
-let step2 = merge (prep(step1)) (prep(join(seq(string2Type ("-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1"))))) //-1#3-1#4-1  -> #2:2#3:2#4:2
+let step2 = merge (step1) (join(seq(string2Type ("-1+1+1+1-1-1-1-1+1+1+1+1-1-1-1-1-1")))) //-1#3-1#4-1  -> #2:2#3:2#4:2
 let step3 = seq (jc (string2Type ("+1")) step2) //#4:2#4:2
-let step4 = merge (prep(join(seq(string2Type ("+1-1-1-1"))))) (prep(step3))  //#5:3#4:3 
+let step4 = merge (join(seq(string2Type ("+1-1-1-1")))) (step3)  //#5:3#4:3 
 let step5 = jc (string2Type ("+2")) step4
 
 printfn "\nTest Example 1: %s" (type2string (step5));;
 
 let step1a = join(seq (string2Type ("-1")));;
-let step2a = merge step1a (prep(join(seq(string2Type("-1")))))
+let step2a = merge step1a (join(seq(string2Type("-1"))))
 let step3a = seq (jc (string2Type ("+1#1")) step2a)
 
 
@@ -164,7 +164,7 @@ let checkAST3 = type2string (infer ast3 []) |> should equal "#2"
 let ast4 = [Leaf (Tag.Plus, 1); Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1);Branch ([Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
 let checkAST4 = type2string (infer ast4 []) |> should equal "#2"
 
-//+1(+1-1-1) -1 -> #3
+//+1(+1-1-1)-1 -> #3
 let ast5 = [Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1)] 
 let checkAST5 = type2string (infer ast5 []) |> should equal "#3"
 
@@ -197,7 +197,7 @@ let rec addTree (lst1: char list) : Tree list =
         
 let calculateTFJstring x = infer (addTree(string2charlist x)) []
 
-printfn "infer 2: %A" (calculateTFJstring "+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1");;
+printfn "infer 2: %A" (calculateTFJstring "+2(+1-1-1-1)-1-1");;
 
 
 // Pause terminal
