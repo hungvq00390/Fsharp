@@ -26,19 +26,25 @@ let rec removeValue (chrlst:char list) =
             x::xs 
         else removeValue xs
 
-let isEndBranch branch = 
-    if (branch = ')') then 
+let isEndBranch x = 
+    if (x = ')') then 
+        true 
+    else 
+        false
+let isStartBranch x = 
+    if (x = '(') then 
         true 
     else 
         false
 
-let rec removeBranch (chrlst:char list) =
+let rec removeBranch (chrlst:char list) (total:int)=
     match chrlst with
     | [] -> []
     | x::xs -> 
-        if (isEndBranch x) then 
-            xs 
-        else removeBranch xs
+        if (isEndBranch x) && (total = 0) then xs 
+        elif (isEndBranch x) && (total > 0) then removeBranch xs (total - 1)
+        elif (isStartBranch x) then removeBranch xs (total + 1)
+        else removeBranch xs 0
 
 // Get value of current tag
 let rec getValue (chrlst:char list) =
@@ -176,7 +182,7 @@ let checkAST6 = type2string (infer ast6 []) |> should equal "#6"
 let ast7 = [Leaf (Tag.Plus, 2); Branch ([Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1);Leaf (Tag.Minus, 1)] 
 let checkAST7 = type2string (infer ast7 []) |> should equal "#5"
 
-//+2(+1-1-1-1)+1(#2-1-1-1)-1#3-1#4-1
+//+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1
 let ast8 = [Leaf (Tag.Plus, 2); Branch ([Leaf (Tag.Plus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Plus, 1); Branch ([Leaf (Tag.Plus, 2); Leaf (Tag.Minus, 2); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1); Leaf (Tag.Minus, 1)]); Leaf (Tag.Minus, 1); Leaf (Tag.Plus, 3); Leaf (Tag.Minus, 3);Leaf (Tag.Minus, 1);Leaf (Tag.Plus, 4); Leaf (Tag.Minus, 4);Leaf (Tag.Minus, 1)] 
 let checkAST8 = type2string (infer ast8 []) |> should equal "#11"
 
@@ -191,13 +197,13 @@ let rec addTree (lst1: char list) : Tree list =
     | [] -> []
     | '-'::xs -> List.append [Leaf (Tag.Minus, charListToInt(getValue xs))] (addTree (removeValue xs))
     | '+'::xs -> List.append [Leaf (Tag.Plus, charListToInt(getValue xs))] (addTree (removeValue xs))
-    | '('::xs -> List.append  [Branch (addTree xs)] (addTree (removeBranch xs))
+    | '('::xs -> List.append  [Branch (addTree xs)] (addTree (removeBranch xs 0))
     | ')'::xs -> []
     | x::xs -> addTree xs
         
 let calculateTFJstring x = infer (addTree(string2charlist x)) []
 
-printfn "infer 2: %A" (calculateTFJstring "+2(+1-1-1-1)-1-1");;
+printfn "infer 2: %A" (calculateTFJstring "+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1");;
 
 
 // Pause terminal
