@@ -1,0 +1,32 @@
+%{
+
+
+%}
+
+// The start token becomes a parser function in the compiled code:
+%start start
+
+// Regular tokens
+%token ONACID
+%token COMMIT
+%token SPAWN
+%token SPACE
+
+// Misc tokens
+%token EOF
+
+// This is the type of the data produced by a successful reduction of the 'start'
+// symbol:
+%type < string > start
+
+%%
+
+// These are the rules of the grammar along with the F# code of the 
+// actions executed as rules are reduced.  
+start: File EOF { $1 }
+
+File:
+	| ONACID   { "+1" }
+	| COMMIT    { "-2" }
+	| SPAWN    { "(" }
+	| SPACE    { "" }

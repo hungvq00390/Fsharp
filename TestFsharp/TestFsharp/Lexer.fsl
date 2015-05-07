@@ -1,0 +1,35 @@
+﻿{
+
+module Lexer
+
+// Opens methods related to fslex.exe
+open Microsoft.FSharp.Text.Lexing
+
+let newline (lexbuf: LexBuffer<_>) = 
+  lexbuf.StartPos <- lexbuf.StartPos.NextLine
+
+}
+
+// Regular expressions
+let char        = ['a'-'z' 'A'-'Z']   
+let digit       = ['0'-'9']   
+let int         = '-'?digit+   
+let float       = '-'?digit+ '.' digit+   
+let identifier  = char(char|digit|['-' '_' '.'])*   
+let whitespace  = [' ' '\t']   
+let newline     = "\n\r" | '\n' | '\r'  
+let operator    = ">" | ">=" | "<" | "<=" | "="  
+
+rule tokenstream = parse
+// --------------------------
+| "onacid" 		{ Parser.ONACID }
+| "spawn" 		{ Parser.SPAWN }
+| "commit" 		{ Parser.COMMIT }
+| " " 			{ tokenstream lexbuf }
+
+// --------------------------
+| whitespace	{ tokenstream lexbuf }
+| newline	{ newline lexbuf; tokenstream lexbuf }
+// --------------------------
+| _    		{ failwith ("ParseError" + LexBuffer<_>.LexemeString lexbuf) }
+| eof   	{ Parser.EOF }
