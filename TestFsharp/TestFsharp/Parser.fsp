@@ -10,23 +10,24 @@
 %token ONACID
 %token COMMIT
 %token SPAWN
-%token SPACE
+%token ENDSPAWN
 
 // Misc tokens
 %token EOF
 
 // This is the type of the data produced by a successful reduction of the 'start'
 // symbol:
-%type < string > start
+%type < string list > start
 
 %%
 
 // These are the rules of the grammar along with the F# code of the 
 // actions executed as rules are reduced.  
-start: File EOF { $1 }
+start: File { [$1] }
 
 File:
 	| ONACID   { "+1" }
-	| COMMIT    { "-2" }
+	| COMMIT    { "-1" }
 	| SPAWN    { "(" }
-	| SPACE    { "" }
+	| ENDSPAWN    { ")" }
+	| EOF {""}

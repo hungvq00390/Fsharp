@@ -12,14 +12,14 @@ open Microsoft.FSharp.Text.Parsing.ParseHelpers
 // This type is the type of tokens accepted by the parser
 type token = 
   | EOF
-  | SPACE
+  | ENDSPAWN
   | SPAWN
   | COMMIT
   | ONACID
 // This type is used to give symbolic names to token indexes, useful for error messages
 type tokenId = 
     | TOKEN_EOF
-    | TOKEN_SPACE
+    | TOKEN_ENDSPAWN
     | TOKEN_SPAWN
     | TOKEN_COMMIT
     | TOKEN_ONACID
@@ -35,7 +35,7 @@ type nonTerminalId =
 let tagOfToken (t:token) = 
   match t with
   | EOF  -> 0 
-  | SPACE  -> 1 
+  | ENDSPAWN  -> 1 
   | SPAWN  -> 2 
   | COMMIT  -> 3 
   | ONACID  -> 4 
@@ -44,7 +44,7 @@ let tagOfToken (t:token) =
 let tokenTagToTokenId (tokenIdx:int) = 
   match tokenIdx with
   | 0 -> TOKEN_EOF 
-  | 1 -> TOKEN_SPACE 
+  | 1 -> TOKEN_ENDSPAWN 
   | 2 -> TOKEN_SPAWN 
   | 3 -> TOKEN_COMMIT 
   | 4 -> TOKEN_ONACID 
@@ -61,6 +61,7 @@ let prodIdxToNonTerminal (prodIdx:int) =
     | 3 -> NONTERM_File 
     | 4 -> NONTERM_File 
     | 5 -> NONTERM_File 
+    | 6 -> NONTERM_File 
     | _ -> failwith "prodIdxToNonTerminal: bad production index"
 
 let _fsyacc_endOfInputTag = 7 
@@ -70,7 +71,7 @@ let _fsyacc_tagOfErrorTerminal = 5
 let token_to_string (t:token) = 
   match t with 
   | EOF  -> "EOF" 
-  | SPACE  -> "SPACE" 
+  | ENDSPAWN  -> "ENDSPAWN" 
   | SPAWN  -> "SPAWN" 
   | COMMIT  -> "COMMIT" 
   | ONACID  -> "ONACID" 
@@ -79,42 +80,42 @@ let token_to_string (t:token) =
 let _fsyacc_dataOfToken (t:token) = 
   match t with 
   | EOF  -> (null : System.Object) 
-  | SPACE  -> (null : System.Object) 
+  | ENDSPAWN  -> (null : System.Object) 
   | SPAWN  -> (null : System.Object) 
   | COMMIT  -> (null : System.Object) 
   | ONACID  -> (null : System.Object) 
 let _fsyacc_gotos = [| 0us; 65535us; 1us; 65535us; 0us; 1us; 1us; 65535us; 0us; 2us; |]
 let _fsyacc_sparseGotoTableRowOffsets = [|0us; 1us; 3us; |]
-let _fsyacc_stateToProdIdxsTableElements = [| 1us; 0us; 1us; 0us; 1us; 1us; 1us; 1us; 1us; 2us; 1us; 3us; 1us; 4us; 1us; 5us; |]
+let _fsyacc_stateToProdIdxsTableElements = [| 1us; 0us; 1us; 0us; 1us; 1us; 1us; 2us; 1us; 3us; 1us; 4us; 1us; 5us; 1us; 6us; |]
 let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us; 2us; 4us; 6us; 8us; 10us; 12us; 14us; |]
 let _fsyacc_action_rows = 8
-let _fsyacc_actionTableElements = [|4us; 32768us; 1us; 7us; 2us; 6us; 3us; 5us; 4us; 4us; 0us; 49152us; 1us; 32768us; 0us; 3us; 0us; 16385us; 0us; 16386us; 0us; 16387us; 0us; 16388us; 0us; 16389us; |]
-let _fsyacc_actionTableRowOffsets = [|0us; 5us; 6us; 8us; 9us; 10us; 11us; 12us; |]
-let _fsyacc_reductionSymbolCounts = [|1us; 2us; 1us; 1us; 1us; 1us; |]
-let _fsyacc_productionToNonTerminalTable = [|0us; 1us; 2us; 2us; 2us; 2us; |]
-let _fsyacc_immediateActions = [|65535us; 49152us; 65535us; 16385us; 16386us; 16387us; 16388us; 16389us; |]
+let _fsyacc_actionTableElements = [|5us; 32768us; 0us; 7us; 1us; 6us; 2us; 5us; 3us; 4us; 4us; 3us; 0us; 49152us; 0us; 16385us; 0us; 16386us; 0us; 16387us; 0us; 16388us; 0us; 16389us; 0us; 16390us; |]
+let _fsyacc_actionTableRowOffsets = [|0us; 6us; 7us; 8us; 9us; 10us; 11us; 12us; |]
+let _fsyacc_reductionSymbolCounts = [|1us; 1us; 1us; 1us; 1us; 1us; 1us; |]
+let _fsyacc_productionToNonTerminalTable = [|0us; 1us; 2us; 2us; 2us; 2us; 2us; |]
+let _fsyacc_immediateActions = [|65535us; 49152us; 16385us; 16386us; 16387us; 16388us; 16389us; 16390us; |]
 let _fsyacc_reductions ()  =    [| 
-# 97 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 98 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data :  string )) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data :  string list )) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
                       raise (Microsoft.FSharp.Text.Parsing.Accept(Microsoft.FSharp.Core.Operators.box _1))
                    )
                  : '_startstart));
-# 106 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 107 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'File)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                                       _1 
+                                   [_1] 
                    )
 # 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                 :  string ));
-# 117 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+                 :  string list ));
+# 118 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
@@ -124,17 +125,17 @@ let _fsyacc_reductions ()  =    [|
                    )
 # 29 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  : 'File));
-# 127 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 128 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                                    "-2" 
+                                    "-1" 
                    )
 # 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  : 'File));
-# 137 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 138 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
@@ -144,18 +145,28 @@ let _fsyacc_reductions ()  =    [|
                    )
 # 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  : 'File));
-# 147 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 148 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                                   "" 
+                                      ")" 
                    )
 # 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  : 'File));
-|]
 # 158 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                             ""
+                   )
+# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                 : 'File));
+|]
+# 169 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;
@@ -177,5 +188,5 @@ let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> =
     numTerminals = 8;
     productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable  }
 let engine lexer lexbuf startState = (tables ()).Interpret(lexer, lexbuf, startState)
-let start lexer lexbuf :  string  =
+let start lexer lexbuf :  string list  =
     Microsoft.FSharp.Core.Operators.unbox ((tables ()).Interpret(lexer, lexbuf, 0))

@@ -1,4 +1,10 @@
-
-
-
-onacid onacid
+onacid;
+	onacid;
+		spawn(e1;commit;commit)
+			onacid;
+				spawn(e2;commit;commit;commit);
+			commit;
+		e3
+	commit
+e4
+commit

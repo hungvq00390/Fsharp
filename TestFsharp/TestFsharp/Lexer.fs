@@ -9,12 +9,11 @@ open Microsoft.FSharp.Text.Lexing
 let newline (lexbuf: LexBuffer<_>) = 
   lexbuf.StartPos <- lexbuf.StartPos.NextLine
 
-
-# 13 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 12 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
 let trans : uint16[] array = 
     [| 
     (* State 0 *)
-     [| 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 5us; 6us; 8us; 8us; 7us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 4us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 3us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 1us; 8us; 8us; 8us; 2us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 9us; |];
+     [| 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 5us; 6us; 8us; 8us; 7us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 5us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 4us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 3us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 1us; 8us; 8us; 8us; 2us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 8us; 9us; |];
     (* State 1 *)
      [| 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 20us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; |];
     (* State 2 *)
@@ -73,44 +72,44 @@ and tokenstream  (lexbuf : Microsoft.FSharp.Text.Lexing.LexBuffer<_>) = _fslex_t
 and _fslex_tokenstream  _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 25 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
-                              Parser.ONACID 
-# 78 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 24 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+                              Parser.ONACID;
+# 77 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | 1 -> ( 
-# 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
-                             Parser.SPAWN 
-# 83 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 25 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+                             Parser.SPAWN;
+# 82 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | 2 -> ( 
-# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
-                              Parser.COMMIT 
-# 88 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+                              Parser.COMMIT;
+# 87 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | 3 -> ( 
-# 28 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
-                          tokenstream lexbuf 
-# 93 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+                         Parser.ENDSPAWN;
+# 92 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | 4 -> ( 
 # 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
                               tokenstream lexbuf 
-# 98 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 97 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | 5 -> ( 
 # 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
                            newline lexbuf; tokenstream lexbuf 
-# 103 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 102 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | 6 -> ( 
 # 34 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
-                          failwith ("ParseError" + LexBuffer<_>.LexemeString lexbuf) 
-# 108 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+                          tokenstream lexbuf 
+# 107 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | 7 -> ( 
 # 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
                           Parser.EOF 
-# 113 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 112 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
           )
   | _ -> failwith "tokenstream"
 
