@@ -12,6 +12,8 @@ open Microsoft.FSharp.Text.Parsing.ParseHelpers
 // This type is the type of tokens accepted by the parser
 type token = 
   | EOF
+  | INT of (int)
+  | THREAD
   | ENDSPAWN
   | SPAWN
   | COMMIT
@@ -19,6 +21,8 @@ type token =
 // This type is used to give symbolic names to token indexes, useful for error messages
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_INT
+    | TOKEN_THREAD
     | TOKEN_ENDSPAWN
     | TOKEN_SPAWN
     | TOKEN_COMMIT
@@ -35,21 +39,25 @@ type nonTerminalId =
 let tagOfToken (t:token) = 
   match t with
   | EOF  -> 0 
-  | ENDSPAWN  -> 1 
-  | SPAWN  -> 2 
-  | COMMIT  -> 3 
-  | ONACID  -> 4 
+  | INT _ -> 1 
+  | THREAD  -> 2 
+  | ENDSPAWN  -> 3 
+  | SPAWN  -> 4 
+  | COMMIT  -> 5 
+  | ONACID  -> 6 
 
 // This function maps integer indexes to symbolic token ids
 let tokenTagToTokenId (tokenIdx:int) = 
   match tokenIdx with
   | 0 -> TOKEN_EOF 
-  | 1 -> TOKEN_ENDSPAWN 
-  | 2 -> TOKEN_SPAWN 
-  | 3 -> TOKEN_COMMIT 
-  | 4 -> TOKEN_ONACID 
-  | 7 -> TOKEN_end_of_input
-  | 5 -> TOKEN_error
+  | 1 -> TOKEN_INT 
+  | 2 -> TOKEN_THREAD 
+  | 3 -> TOKEN_ENDSPAWN 
+  | 4 -> TOKEN_SPAWN 
+  | 5 -> TOKEN_COMMIT 
+  | 6 -> TOKEN_ONACID 
+  | 9 -> TOKEN_end_of_input
+  | 7 -> TOKEN_error
   | _ -> failwith "tokenTagToTokenId: bad token"
 
 /// This function maps production indexes returned in syntax errors to strings representing the non terminal that would be produced by that production
@@ -62,15 +70,19 @@ let prodIdxToNonTerminal (prodIdx:int) =
     | 4 -> NONTERM_File 
     | 5 -> NONTERM_File 
     | 6 -> NONTERM_File 
+    | 7 -> NONTERM_File 
+    | 8 -> NONTERM_File 
     | _ -> failwith "prodIdxToNonTerminal: bad production index"
 
-let _fsyacc_endOfInputTag = 7 
-let _fsyacc_tagOfErrorTerminal = 5
+let _fsyacc_endOfInputTag = 9 
+let _fsyacc_tagOfErrorTerminal = 7
 
 // This function gets the name of a token as a string
 let token_to_string (t:token) = 
   match t with 
   | EOF  -> "EOF" 
+  | INT _ -> "INT" 
+  | THREAD  -> "THREAD" 
   | ENDSPAWN  -> "ENDSPAWN" 
   | SPAWN  -> "SPAWN" 
   | COMMIT  -> "COMMIT" 
@@ -80,22 +92,24 @@ let token_to_string (t:token) =
 let _fsyacc_dataOfToken (t:token) = 
   match t with 
   | EOF  -> (null : System.Object) 
+  | INT _fsyacc_x -> Microsoft.FSharp.Core.Operators.box _fsyacc_x 
+  | THREAD  -> (null : System.Object) 
   | ENDSPAWN  -> (null : System.Object) 
   | SPAWN  -> (null : System.Object) 
   | COMMIT  -> (null : System.Object) 
   | ONACID  -> (null : System.Object) 
 let _fsyacc_gotos = [| 0us; 65535us; 1us; 65535us; 0us; 1us; 1us; 65535us; 0us; 2us; |]
 let _fsyacc_sparseGotoTableRowOffsets = [|0us; 1us; 3us; |]
-let _fsyacc_stateToProdIdxsTableElements = [| 1us; 0us; 1us; 0us; 1us; 1us; 1us; 2us; 1us; 3us; 1us; 4us; 1us; 5us; 1us; 6us; |]
-let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us; 2us; 4us; 6us; 8us; 10us; 12us; 14us; |]
-let _fsyacc_action_rows = 8
-let _fsyacc_actionTableElements = [|5us; 32768us; 0us; 7us; 1us; 6us; 2us; 5us; 3us; 4us; 4us; 3us; 0us; 49152us; 0us; 16385us; 0us; 16386us; 0us; 16387us; 0us; 16388us; 0us; 16389us; 0us; 16390us; |]
-let _fsyacc_actionTableRowOffsets = [|0us; 6us; 7us; 8us; 9us; 10us; 11us; 12us; |]
-let _fsyacc_reductionSymbolCounts = [|1us; 1us; 1us; 1us; 1us; 1us; 1us; |]
-let _fsyacc_productionToNonTerminalTable = [|0us; 1us; 2us; 2us; 2us; 2us; 2us; |]
-let _fsyacc_immediateActions = [|65535us; 49152us; 16385us; 16386us; 16387us; 16388us; 16389us; 16390us; |]
+let _fsyacc_stateToProdIdxsTableElements = [| 1us; 0us; 1us; 0us; 1us; 1us; 1us; 2us; 1us; 3us; 1us; 4us; 1us; 5us; 1us; 6us; 1us; 7us; 1us; 8us; |]
+let _fsyacc_stateToProdIdxsTableRowOffsets = [|0us; 2us; 4us; 6us; 8us; 10us; 12us; 14us; 16us; 18us; |]
+let _fsyacc_action_rows = 10
+let _fsyacc_actionTableElements = [|7us; 32768us; 0us; 7us; 1us; 9us; 2us; 8us; 3us; 6us; 4us; 5us; 5us; 4us; 6us; 3us; 0us; 49152us; 0us; 16385us; 0us; 16386us; 0us; 16387us; 0us; 16388us; 0us; 16389us; 0us; 16390us; 0us; 16391us; 0us; 16392us; |]
+let _fsyacc_actionTableRowOffsets = [|0us; 8us; 9us; 10us; 11us; 12us; 13us; 14us; 15us; 16us; |]
+let _fsyacc_reductionSymbolCounts = [|1us; 1us; 1us; 1us; 1us; 1us; 1us; 1us; 1us; |]
+let _fsyacc_productionToNonTerminalTable = [|0us; 1us; 2us; 2us; 2us; 2us; 2us; 2us; 2us; |]
+let _fsyacc_immediateActions = [|65535us; 49152us; 16385us; 16386us; 16387us; 16388us; 16389us; 16390us; 16391us; 16392us; |]
 let _fsyacc_reductions ()  =    [| 
-# 98 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 112 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data :  string list )) in
             Microsoft.FSharp.Core.Operators.box
@@ -104,69 +118,90 @@ let _fsyacc_reductions ()  =    [|
                       raise (Microsoft.FSharp.Text.Parsing.Accept(Microsoft.FSharp.Core.Operators.box _1))
                    )
                  : '_startstart));
-# 107 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 121 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'File)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                                    [_1] 
                    )
-# 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  :  string list ));
-# 118 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
-        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
-            Microsoft.FSharp.Core.Operators.box
-                (
-                   (
-# 29 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                                   "+1" 
-                   )
-# 29 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                 : 'File));
-# 128 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 132 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                                    "+1" 
+                   )
+# 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                 : 'File));
+# 142 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                                     "-1" 
                    )
-# 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                 : 'File));
-# 138 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
-        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
-            Microsoft.FSharp.Core.Operators.box
-                (
-                   (
-# 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                                   "(" 
-                   )
 # 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  : 'File));
-# 148 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 152 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                                      ")" 
+                                 "(" 
                    )
 # 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  : 'File));
-# 158 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 162 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
 # 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
-                             ""
+                                    ")" 
                    )
 # 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                 : 'File));
+# 172 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 34 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                               "" 
+                   )
+# 34 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                 : 'File));
+# 182 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                                 "#"
+                   )
+# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                 : 'File));
+# 192 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+                                    "INT"
+                   )
+# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
                  : 'File));
 |]
-# 169 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 204 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;
@@ -185,7 +220,7 @@ let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> =
                               match parse_error_rich with 
                               | Some f -> f ctxt
                               | None -> parse_error ctxt.Message);
-    numTerminals = 8;
+    numTerminals = 10;
     productionToNonTerminalTable = _fsyacc_productionToNonTerminalTable  }
 let engine lexer lexbuf startState = (tables ()).Interpret(lexer, lexbuf, startState)
 let start lexer lexbuf :  string list  =

@@ -65,14 +65,14 @@
     <None Include="App.config" />
     <Compile Include="CoreTypeSystem.fs" />
     <Compile Include="AST.fs" />
-    <Compile Include="TestTypeSystem.fs" />
     <None Include="packages.config" />
     <None Include="Parser.fsp" />
     <None Include="Lexer.fsl" />
     <Compile Include="Parser.fsi" />
     <Compile Include="Parser.fs" />
     <Compile Include="Lexer.fs" />
-    <Compile Include="TestParse.fs" />
+    <Compile Include="TestTypeSystem.fs" />
+    <Compile Include="ParseTFJ.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

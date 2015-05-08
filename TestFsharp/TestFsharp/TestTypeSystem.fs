@@ -3,6 +3,7 @@ open CoreTypeSystem
 open NUnit.Framework
 open FsUnit
 open AST
+open System.IO
 
 // Test Common function
 
@@ -163,8 +164,6 @@ let rec addTree (lst1: char list) : Tree list =
     | x::xs -> addTree xs
 
 let calculateTFJstring x = infer (addTree(string2charlist x)) []
-
-printfn "Result: %A" (calculateTFJstring "+2(+1-1-1-1)+1(+2-2-1-1-1)-1+3-3-1+4-4-1");;
 
 printfn "\nPress any key to continue."  
 System.Console.ReadKey(true) |> ignore  

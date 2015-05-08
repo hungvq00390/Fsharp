@@ -1,6 +1,7 @@
 ﻿{
 
 module Lexer
+open System   
 
 // Opens methods related to fslex.exe
 open Microsoft.FSharp.Text.Lexing
@@ -21,11 +22,11 @@ let operator    = ">" | ">=" | "<" | "<=" | "="
 
 rule tokenstream = parse
 // --------------------------
-| "onacid" 		{ Parser.ONACID;}
-| "spawn" 		{ Parser.SPAWN;}
-| "commit" 		{ Parser.COMMIT;}
+| "onacid" 	{ Parser.ONACID;}
+| "spawn" 	{ Parser.SPAWN;}
+| "commit" 	{ Parser.COMMIT;}
 | ")" 		{ Parser.ENDSPAWN;}
-
+| "e"		{Parser.THREAD}
 
 // --------------------------
 | whitespace	{ tokenstream lexbuf }

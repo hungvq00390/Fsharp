@@ -2,12 +2,16 @@
 module Parser
 type token = 
   | EOF
+  | INT of (int)
+  | THREAD
   | ENDSPAWN
   | SPAWN
   | COMMIT
   | ONACID
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_INT
+    | TOKEN_THREAD
     | TOKEN_ENDSPAWN
     | TOKEN_SPAWN
     | TOKEN_COMMIT

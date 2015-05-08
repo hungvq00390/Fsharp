@@ -11,10 +11,11 @@
 %token COMMIT
 %token SPAWN
 %token ENDSPAWN
+%token THREAD
+%token <int> INT
 
 // Misc tokens
 %token EOF
-
 // This is the type of the data produced by a successful reduction of the 'start'
 // symbol:
 %type < string list > start
@@ -26,8 +27,10 @@
 start: File { [$1] }
 
 File:
-	| ONACID   { "+1" }
+	| ONACID    { "+1" }
 	| COMMIT    { "-1" }
-	| SPAWN    { "(" }
-	| ENDSPAWN    { ")" }
-	| EOF {""}
+	| SPAWN		{ "(" }
+	| ENDSPAWN  { ")" }
+	| EOF		{ "" }
+	| THREAD	{ "#"}
+	| INT       { "INT"}
