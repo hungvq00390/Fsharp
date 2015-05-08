@@ -32,10 +32,8 @@ let calculateTFJfromFile (fileName:string) =
     let result = calculateTFJstring (tokenList |> String.concat "")
     printfn "Final result: %A" result
 
-//let run = calculateTFJfromFile "test.txt"
+
 let run = calculateTFJfromFile "test1.txt"
 
 printfn "Press any key to continue..."
 System.Console.ReadLine() |> ignore
-
-
