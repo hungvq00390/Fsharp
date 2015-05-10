@@ -64,7 +64,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <Compile Include="CoreTypeSystem.fs" />
-    <Compile Include="AST.fs" />
     <None Include="packages.config" />
     <None Include="Parser.fsp" />
     <None Include="Lexer.fsl" />

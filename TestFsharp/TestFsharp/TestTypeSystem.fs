@@ -2,7 +2,6 @@
 open CoreTypeSystem
 open NUnit.Framework
 open FsUnit
-open AST
 open System.IO
 
 // Test Common function
