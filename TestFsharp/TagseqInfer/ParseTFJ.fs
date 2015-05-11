@@ -46,6 +46,7 @@ let calculateTFJfromFile (fileName:string) =
 // Run test file
 let run = calculateTFJfromFile "test.txt"
 let run1 = calculateTFJfromFile "test1.txt"
+let run2 = calculateTFJfromFile "test2.txt"
 
 printfn "Press any key to continue..."
 System.Console.ReadLine() |> ignore

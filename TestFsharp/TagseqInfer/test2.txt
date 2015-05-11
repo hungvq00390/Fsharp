@@ -1,0 +1,12 @@
+onacid;
+	onacid;
+		spawn(e1;commit;commit)
+			onacid;
+				spawn(e2;commit;commit;commit);			
+					onacid;
+						spawn(e3;commit;commit;commit;commit);	
+			commit;
+		commit;
+	commit
+e4
+commit
