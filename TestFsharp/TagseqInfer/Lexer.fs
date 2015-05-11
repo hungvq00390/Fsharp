@@ -1,4 +1,4 @@
-# 1 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 1 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
  
 
 module Lexer
@@ -10,7 +10,7 @@ open Microsoft.FSharp.Text.Lexing
 let newline (lexbuf: LexBuffer<_>) = 
   lexbuf.StartPos <- lexbuf.StartPos.NextLine
 
-# 13 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 13 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
 let trans : uint16[] array = 
     [| 
     (* State 0 *)
@@ -75,50 +75,50 @@ and tokenstream  (lexbuf : Microsoft.FSharp.Text.Lexing.LexBuffer<_>) = _fslex_t
 and _fslex_tokenstream  _fslex_state lexbuf =
   match _fslex_tables.Interpret(_fslex_state,lexbuf) with
   | 0 -> ( 
-# 25 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 25 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                              Parser.ONACID;
-# 80 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 80 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 1 -> ( 
-# 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 26 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                             Parser.SPAWN;
-# 85 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 85 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 2 -> ( 
-# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                              Parser.COMMIT;
-# 90 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 90 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 3 -> ( 
-# 28 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 28 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                          Parser.ENDSPAWN;
-# 95 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 95 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 4 -> ( 
-# 29 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 29 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                        Parser.THREAD
-# 100 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 100 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 5 -> ( 
-# 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                               tokenstream lexbuf 
-# 105 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 105 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 6 -> ( 
-# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                            newline lexbuf; tokenstream lexbuf 
-# 110 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 110 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 7 -> ( 
-# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                           tokenstream lexbuf 
-# 115 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 115 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | 8 -> ( 
-# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fsl"
+# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fsl"
                           Parser.EOF 
-# 120 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 120 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"
           )
   | _ -> failwith "tokenstream"
 
-# 3000000 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Lexer.fs"
+# 3000000 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Lexer.fs"

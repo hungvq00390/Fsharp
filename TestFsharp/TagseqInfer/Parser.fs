@@ -3,12 +3,12 @@ module Parser
 #nowarn "64";; // turn off warnings that type variables used in production annotations are instantiated to concrete type
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
-# 1 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 1 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
 
 
 
 
-# 11 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 11 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
 // This type is the type of tokens accepted by the parser
 type token = 
   | EOF
@@ -109,7 +109,7 @@ let _fsyacc_reductionSymbolCounts = [|1us; 1us; 1us; 1us; 1us; 1us; 1us; 1us; 1u
 let _fsyacc_productionToNonTerminalTable = [|0us; 1us; 2us; 2us; 2us; 2us; 2us; 2us; 2us; |]
 let _fsyacc_immediateActions = [|65535us; 49152us; 16385us; 16386us; 16387us; 16388us; 16389us; 16390us; 16391us; 16392us; |]
 let _fsyacc_reductions ()  =    [| 
-# 112 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 112 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data :  string list )) in
             Microsoft.FSharp.Core.Operators.box
@@ -118,90 +118,90 @@ let _fsyacc_reductions ()  =    [|
                       raise (Microsoft.FSharp.Text.Parsing.Accept(Microsoft.FSharp.Core.Operators.box _1))
                    )
                  : '_startstart));
-# 121 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 121 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'File)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                    [_1] 
                    )
-# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 27 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  :  string list ));
-# 132 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 132 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                     "+1" 
                    )
-# 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 30 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  : 'File));
-# 142 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 142 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                     "-1" 
                    )
-# 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 31 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  : 'File));
-# 152 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 152 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                  "(" 
                    )
-# 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 32 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  : 'File));
-# 162 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 162 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                     ")" 
                    )
-# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 33 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  : 'File));
-# 172 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 172 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 34 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 34 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                "" 
                    )
-# 34 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 34 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  : 'File));
-# 182 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 182 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                  "#"
                    )
-# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 35 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  : 'File));
-# 192 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 192 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                                     "INT"
                    )
-# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fsp"
+# 36 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fsp"
                  : 'File));
 |]
-# 204 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TestFsharp\Parser.fs"
+# 204 "C:\Users\Hung\Documents\GitHub\Fsharp\TestFsharp\TagseqInfer\Parser.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;
