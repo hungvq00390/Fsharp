@@ -1,5 +1,4 @@
-﻿// Learn more about F# at http://fsharp.net
-module ParseTFJ
+﻿module ParseTFJ
 open System.IO
 open Microsoft.FSharp.Text.Lexing
 open TestTypeSystem
