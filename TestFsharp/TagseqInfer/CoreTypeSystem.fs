@@ -15,8 +15,6 @@ type Tree =
    | Branch of Tree list
    | Leaf of TagNum 
 
-let e55 = [(Tag.Plus,1); (Tag.Plus,1); (Tag.Minus,3);(Tag.Plus,1);(Tag.Minus,1);(Tag.Plus,1);(Tag.Minus,1);]
-
 // Define seq function
 let rec seq (lst: TagSeq) : TagSeq =
     match lst with
@@ -68,7 +66,7 @@ let rec merge (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
             (Tag.Max, snd (List.head lst2)) :: (merge lst1 (List.tail lst2)) 
         else failwith "Error in merge"
 
-// Define join commit function
+// Define joint commit function
 let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
     match lst1 with
     | [] -> if List.isEmpty lst2 then 
@@ -85,7 +83,7 @@ let rec jc (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
          |(Tag.Join, l2)::xs2 -> 
             if m1 > 1 then 
                 jc [(Tag.Plus, m1-1)] (seq ((Tag.Max, l2) :: xs2)) 
-            else 
+            else
                 (Tag.Max, l2) :: xs2
         | otherwise -> failwith "Need attention in jc 1"
     | (Tag.Plus,n1)::(Tag.Max,n2)::[] -> 
@@ -122,7 +120,7 @@ let choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
                     lst2
             else []
 
-let rec infer (branch: Tree list) (headseq:TagNum list) = 
+let rec infer (branch: Tree list) (headseq:TagSeq) = 
     match branch with 
     | [] -> seq headseq
     | x::xs -> 

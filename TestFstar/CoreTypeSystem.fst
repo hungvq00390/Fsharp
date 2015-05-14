@@ -140,4 +140,3 @@ let choice (lst1: TagSeq) (lst2: TagSeq) : TagSeq =
                 else 
                     lst2
             else []
- 
